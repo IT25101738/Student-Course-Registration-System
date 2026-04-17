@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Registration</title>
+    <style>
+        /* Professional, centered layout */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+            display: block;
+            margin-top: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 0 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        input:focus {
+            border-color: #28a745;
+            outline: none;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 25px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .login-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        #statusMessage {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Register as a New Student</h2>
+
+    <label>Full Name:</label>
+    <input type="text" id="studentName" placeholder="Enter your name">
+
+    <label>Email Address:</label>
+    <input type="email" id="studentEmail" placeholder="Enter your email">
+
+    <label>Major:</label>
+    <input type="text" id="studentMajor" placeholder="e.g. Software Engineering">
+
+    <label>Password:</label>
+    <input type="password" id="studentPassword" placeholder="Create a password">
+
+    <button onclick="registerStudent()">Register</button>
+
+    <p id="statusMessage"></p>
+
+    <div class="login-link">
+        Already have an account? <a href="login.html">Log in here</a>
+    </div>
+</div>
+
+<script>
+    function registerStudent() {
+        const name = document.getElementById("studentName").value;
+        const email = document.getElementById("studentEmail").value;
+        const major = document.getElementById("studentMajor").value;
+        const password = document.getElementById("studentPassword").value;
+        const statusMessage = document.getElementById("statusMessage");
+
+        // 1. Stop the user if they left a box blank
+        if (!name || !email || !major || !password) {
+            statusMessage.style.color = "#dc3545"; // Red error color
+            statusMessage.innerText = "Please fill in all fields.";
+            return;
+        }
+
+        statusMessage.innerText = "Registering...";
+        statusMessage.style.color = "#555";
+
+        // 2. Package the data
+        const studentData = {
+            name: name,
+            email: email,
+            major: major,
+            password: password
+        };
+
+        // 3. Send to Java Server
+        fetch('http://localhost:8080/api/students/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(studentData)
+        })
+        .then(response => {
+            if(response.ok) {
+                // Success! Instantly teleport the user to the login page
+                window.location.href = "login.html";
+            } else {
+                statusMessage.style.color = "#dc3545";
+                statusMessage.innerText = "Error: Could not register. Email might already exist.";
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            statusMessage.style.color = "#dc3545";
+            statusMessage.innerText = "Network Error. Is your Java server running?";
+        });
+    }
+</script>
+
+</body>
+</html>

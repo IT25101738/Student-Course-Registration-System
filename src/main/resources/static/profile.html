@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Profile - UniPortal</title>
+    <style>
+        /* Same universal styling as your dashboard */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f8f9fa; }
+        .sidebar { width: 250px; background-color: #212529; color: white; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 20px; font-size: 24px; font-weight: bold; border-bottom: 1px solid #343a40; }
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+        .sidebar-menu li { padding: 15px 20px; cursor: pointer; transition: background 0.3s; color: #adb5bd; }
+        .sidebar-menu li:hover { background-color: #343a40; color: white; }
+        .sidebar-menu li.active { background-color: #343a40; color: white; border-left: 4px solid #007bff; }
+        .logout-btn { padding: 15px 20px; color: #dc3545; cursor: pointer; border-top: 1px solid #343a40; transition: background 0.3s; }
+        .logout-btn:hover { background-color: #343a40; }
+
+        /* Main Content & Form Styling */
+        .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; }
+        .header-row h1 { margin: 0 0 30px 0; color: #333; }
+        .form-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e9ecef; max-width: 500px; }
+        label { font-weight: bold; color: #555; font-size: 14px; display: block; margin-top: 15px; }
+        input { width: 100%; padding: 12px; margin: 8px 0 0 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        input:focus { border-color: #007bff; outline: none; box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); }
+        button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 25px; transition: 0.3s; }
+        button:hover { background-color: #0056b3; }
+        #statusMessage { text-align: center; font-weight: bold; margin-top: 15px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">UniPortal</div>
+    <ul class="sidebar-menu">
+        <li onclick="window.location.href='dashboard.html'">Dashboard</li>
+        <li>Register Courses</li>
+        <li>My Schedule</li>
+        <li class="active">Update Profile</li>
+    </ul>
+    <div class="logout-btn" onclick="logout()">Logout</div>
+</div>
+
+<div class="main-content">
+    <div class="header-row">
+        <h1>Profile Settings ⚙️</h1>
+    </div>
+
+    <div class="form-card">
+        <p style="color: #6c757d; font-size: 14px; margin-top: 0;">Verify your email address below, then enter your new details to update your profile.</p>
+
+        <label>Verify Your Email:</label>
+        <input type="email" id="updateEmail" placeholder="Enter your current email">
+
+        <label>New Full Name:</label>
+        <input type="text" id="updateName" placeholder="Enter your new name">
+
+        <label>New Major:</label>
+        <input type="text" id="updateMajor" placeholder="e.g. Data Science">
+
+        <button onclick="updateProfile()">Save Changes</button>
+        <p id="statusMessage"></p>
+    </div>
+</div>
+
+<script>
+    // Security Check
+    if (!sessionStorage.getItem("loggedInStudentName")) {
+        window.location.href = "login.html";
+    }
+
+    function updateProfile() {
+        const email = document.getElementById("updateEmail").value;
+        const newName = document.getElementById("updateName").value;
+        const newMajor = document.getElementById("updateMajor").value;
+        const statusMessage = document.getElementById("statusMessage");
+
+        if (!email || !newName || !newMajor) {
+            statusMessage.style.color = "#dc3545";
+            statusMessage.innerText = "Please fill in all fields.";
+            return;
+        }
+
+        statusMessage.style.color = "#555";
+        statusMessage.innerText = "Saving changes...";
+
+        // Send the PUT request to our Java method
+        fetch('http://localhost:8080/api/students/update', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, name: newName, major: newMajor })
+        })
+        .then(response => {
+            if(response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Student not found");
+            }
+        })
+        .then(updatedStudent => {
+            // Update the browser's memory so the dashboard shows the new data
+            sessionStorage.setItem("loggedInStudentName", updatedStudent.name);
+            sessionStorage.setItem("loggedInStudentMajor", updatedStudent.major);
+
+            statusMessage.style.color = "#28a745"; // Green success
+            statusMessage.innerText = "Success! Profile updated.";
+
+            // Teleport back to dashboard after 1.5 seconds to see the changes
+            setTimeout(() => {
+                window.location.href = "dashboard.html";
+            }, 1500);
+        })
+        .catch(error => {
+            statusMessage.style.color = "#dc3545";
+            statusMessage.innerText = "Error: Could not find a student with that email.";
+        });
+    }
+
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>
