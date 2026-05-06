@@ -17,6 +17,6 @@ public class CoreCourse extends Course{
 
     @Override
     public String getCategory(){
-        return "Core";
+        return "Core Module";
     }
 }

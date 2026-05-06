@@ -3,11 +3,11 @@ package com.university.StudentRegistration.controller;
 import com.university.StudentRegistration.model.CourseRegistration;
 import com.university.StudentRegistration.repository.CourseRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/registrations")
+@CrossOrigin
 public class CourseRegistrationController {
 
     @Autowired

@@ -33,4 +33,8 @@ public class Course {
     public String getTitle(){
         return title;
     }
+
+    public int getCredits() {
+        return credits;
+    }
 }
