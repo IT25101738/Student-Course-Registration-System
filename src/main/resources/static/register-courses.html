@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Registration - UniPortal</title>
+    <style>
+        /* --- SHARED UNIPORTAL STYLING --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #212529;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 1px solid #343a40;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu a {
+            text-decoration: none;
+            color: #adb5bd;
+        }
+
+        .sidebar-menu li {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .sidebar-menu li:hover {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .sidebar-menu li.active {
+            background-color: #343a40;
+            color: white;
+            border-left: 4px solid #007bff;
+        }
+
+        .logout-btn {
+            padding: 15px 20px;
+            color: #dc3545;
+            cursor: pointer;
+            border-top: 1px solid #343a40;
+            text-decoration: none;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header-row h1 { margin: 0; color: #333; }
+
+        .badge {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* --- COURSE REGISTRATION SPECIFIC STYLING --- */
+        .search-container {
+            margin-bottom: 25px;
+        }
+
+        #courseSearch {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .uni-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+        }
+
+        .course-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .course-table th {
+            padding: 12px;
+            border-bottom: 2px solid #f0f0f0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .course-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #f9f9f9;
+            color: #333;
+        }
+
+        .btn-register {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .btn-register:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <div class="sidebar-header">UniPortal</div>
+    <ul class="sidebar-menu">
+        <a href="dashboard.html"><li>Dashboard</li></a>
+        <a href="register-courses.html"><li class="active">Register Courses</li></a>
+        <a href="profile.html"><li>My Schedule</li></a>
+        <a href="update-profile.html"><li>Update Profile</li></a>
+    </ul>
+    <a href="login.html" class="logout-btn">Logout</a>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="header-row">
+        <h1>Course Registration</h1>
+        <div class="badge">Spring 2026 / Registration</div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="courseSearch" onkeyup="filterCourses()" placeholder="Search by code or name...">
+    </div>
+
+    <div class="uni-card">
+        <table class="course-table">
+            <thead>
+            <tr>
+                <th>Code</th>
+                <th>Course Title</th>
+                <th>Credits</th>
+                <th>Type</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="courseTableBody">
+            <!-- Data will be loaded here via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // 1. Fetch available courses from the Database on page load
+    window.onload = function() {
+        fetch('/api/courses/all')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('courseTableBody');
+                tableBody.innerHTML = ''; // Clear table
+
+                data.forEach(course => {
+                    const row = `
+                            <tr>
+                                <td><strong>${course.courseCode}</strong></td>
+                                <td>${course.title}</td>
+                                <td>${course.credits}</td>
+                                <td>${course.category}</td>
+                                <td>
+                                    <button class="btn-register" onclick="performRegistration('${course.courseCode}')">
+                                        Register
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    tableBody.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Error loading courses:', error));
+    };
+
+    // 2. Search/Filter Functionality
+    function filterCourses() {
+        const input = document.getElementById('courseSearch').value.toUpperCase();
+        const rows = document.getElementById('courseTableBody').getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const codeText = rows[i].cells[0].textContent || rows[i].cells[0].innerText;
+            const titleText = rows[i].cells[1].textContent || rows[i].cells[1].innerText;
+
+            if (codeText.toUpperCase().indexOf(input) > -1 || titleText.toUpperCase().indexOf(input) > -1) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+
+    // 3. Register for a Course (POST request to Backend)
+    function performRegistration(code) {
+        const studentEmail = "adheesha@example.com"; // Current student identity
+
+        const registrationData = {
+            studentEmail: studentEmail,
+            courseCode: code
+        };
+
+        fetch('/api/registrations/register-course', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(registrationData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Successfully registered for " + code);
+                    window.location.href = "dashboard.html"; // Redirect to dashboard after success
+                } else {
+                    alert("Registration failed. You might already be registered for this course.");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+</body>
+</html>
