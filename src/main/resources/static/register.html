@@ -21,6 +21,9 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 400px;
+            /* Added slight max-height and scroll in case the screen is small */
+            max-height: 90vh;
+            overflow-y: auto;
         }
         h2 {
             text-align: center;
@@ -35,7 +38,8 @@
             display: block;
             margin-top: 15px;
         }
-        input {
+        /* Added 'select' here to style the dropdown exactly like the text boxes */
+        input, select {
             width: 100%;
             padding: 12px;
             margin: 8px 0 0 0;
@@ -44,7 +48,7 @@
             border-radius: 6px;
             font-size: 14px;
         }
-        input:focus {
+        input:focus, select:focus {
             border-color: #28a745;
             outline: none;
             box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
@@ -92,6 +96,12 @@
 <div class="form-box">
     <h2>Register as a New Student</h2>
 
+    <label>Student Level:</label>
+    <select id="studentType" onchange="updateDynamicField()">
+        <option value="UNDERGRAD">Undergraduate Student</option>
+        <option value="GRAD">Graduate Student</option>
+    </select>
+
     <label>Full Name:</label>
     <input type="text" id="studentName" placeholder="Enter your name">
 
@@ -99,7 +109,16 @@
     <input type="email" id="studentEmail" placeholder="Enter your email">
 
     <label>Major:</label>
-    <input type="text" id="studentMajor" placeholder="e.g. Software Engineering">
+    <select id="studentMajor">
+        <option value="Software Engineering">Software Engineering</option>
+        <option value="Computer Science">Computer Science</option>
+        <option value="Data Science">Data Science</option>
+        <option value="Information Technology">Information Technology</option>
+        <option value="Cyber Security">Cyber Security</option>
+    </select>
+
+    <label id="dynamicLabel">High School Name:</label>
+    <input type="text" id="dynamicInput" placeholder="Enter high school name">
 
     <label>Password:</label>
     <input type="password" id="studentPassword" placeholder="Create a password">
@@ -114,15 +133,32 @@
 </div>
 
 <script>
+    // NEW: Function to change the text box label when dropdown changes
+    function updateDynamicField() {
+        const type = document.getElementById("studentType").value;
+        const label = document.getElementById("dynamicLabel");
+        const input = document.getElementById("dynamicInput");
+
+        if (type === "UNDERGRAD") {
+            label.innerText = "High School Name:";
+            input.placeholder = "Enter high school name";
+        } else {
+            label.innerText = "Research Thesis Title:";
+            input.placeholder = "Enter thesis title";
+        }
+    }
+
     function registerStudent() {
+        const type = document.getElementById("studentType").value;
         const name = document.getElementById("studentName").value;
         const email = document.getElementById("studentEmail").value;
         const major = document.getElementById("studentMajor").value;
+        const dynamicData = document.getElementById("dynamicInput").value;
         const password = document.getElementById("studentPassword").value;
         const statusMessage = document.getElementById("statusMessage");
 
-        // 1. Stop the user if they left a box blank
-        if (!name || !email || !major || !password) {
+        // 1. Stop the user if they left ANY box blank
+        if (!name || !email || !major || !password || !dynamicData) {
             statusMessage.style.color = "#dc3545"; // Red error color
             statusMessage.innerText = "Please fill in all fields.";
             return;
@@ -131,11 +167,13 @@
         statusMessage.innerText = "Registering...";
         statusMessage.style.color = "#555";
 
-        // 2. Package the data
+        // 2. Package the data (Now includes type and extraInfo!)
         const studentData = {
+            type: type,
             name: name,
             email: email,
             major: major,
+            extraInfo: dynamicData,
             password: password
         };
 
