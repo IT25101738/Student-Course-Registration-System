@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Registration - UniPortal</title>
+
+  <style>
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #f8f9fa;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+      width: 250px;
+      background-color: #212529;
+      color: white;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 1px solid #343a40;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-grow: 1;
+    }
+
+    .sidebar-menu li {
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+      color: #adb5bd;
+    }
+
+    .sidebar-menu li:hover {
+      background-color: #343a40;
+      color: white;
+    }
+
+    .sidebar-menu li.active {
+      background-color: #343a40;
+      color: white;
+      border-left: 4px solid #007bff;
+    }
+
+    .logout-btn {
+      padding: 15px 20px;
+      color: #dc3545;
+      cursor: pointer;
+      border-top: 1px solid #343a40;
+    }
+
+    .logout-btn:hover {
+      background-color: #343a40;
+    }
+
+    /* MAIN CONTENT */
+
+    .main-content {
+      flex-grow: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .header-row h1 {
+      margin: 0;
+      color: #333;
+    }
+
+    .badge {
+      background-color: #007bff;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* FORM CARD */
+
+    .form-card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #e9ecef;
+      max-width: 600px;
+    }
+
+    .form-card h3 {
+      margin-top: 0;
+      margin-bottom: 25px;
+      color: #212529;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #ced4da;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+
+    .register-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .register-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .message {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: green;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+  <div class="sidebar-header">
+    UniPortal
+  </div>
+
+  <ul class="sidebar-menu">
+
+    <li onclick="window.location.href='dashboard.html'">
+      Dashboard
+    </li>
+
+    <li class="active">
+      Faculty Registration
+    </li>
+
+    <li>
+      Faculty List
+    </li>
+
+    <li onclick="window.location.href='profile.html'">
+      Profile
+    </li>
+
+  </ul>
+
+  <div class="logout-btn" onclick="logout()">
+    Logout
+  </div>
+
+</div>
+
+<!-- MAIN CONTENT -->
+
+<div class="main-content">
+
+  <div class="header-row">
+
+    <h1>Faculty Management 👨‍🏫</h1>
+
+    <div class="badge">
+      Spring 2026 / Faculty Module
+    </div>
+
+  </div>
+
+  <!-- FORM CARD -->
+
+  <div class="form-card">
+
+    <h3>Register New Faculty</h3>
+
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="fullName" placeholder="Enter Faculty Name">
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Enter Email">
+    </div>
+
+    <div class="form-group">
+      <label>Department</label>
+      <input type="text" id="department" placeholder="Enter Department">
+    </div>
+
+    <div class="form-group">
+      <label>Specialization</label>
+      <input type="text" id="specialization" placeholder="Enter Specialization">
+    </div>
+
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="text" id="phoneNumber" placeholder="Enter Phone Number">
+    </div>
+
+    <button class="register-btn" onclick="registerFaculty()">
+      Register Faculty
+    </button>
+
+    <div class="message" id="message"></div>
+
+  </div>
+
+</div>
+
+<script>
+
+  async function registerFaculty() {
+
+    const faculty = {
+
+      fullName: document.getElementById("fullName").value,
+      email: document.getElementById("email").value,
+      department: document.getElementById("department").value,
+      specialization: document.getElementById("specialization").value,
+      phoneNumber: document.getElementById("phoneNumber").value
+
+    };
+
+    const response = await fetch("http://localhost:8080/api/faculty/add", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify(faculty)
+
+    });
+
+    if(response.ok) {
+
+      document.getElementById("message").innerHTML =
+              "Faculty Registered Successfully!";
+
+    } else {
+
+      document.getElementById("message").innerHTML =
+              "Error Registering Faculty";
+
+    }
+  }
+
+  function logout() {
+
+    sessionStorage.clear();
+    window.location.href = "login.html";
+
+  }
+
+</script>
+
+</body>
+</html>
