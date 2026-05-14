@@ -58,4 +58,24 @@ public class CourseController {
             return ResponseEntity.badRequest().body("Error deleting course. It might be tied to existing student registrations.");
         }
     }
+
+    @PutMapping("/{courseCode}")
+    public ResponseEntity<String> updateCourse(@PathVariable String courseCode, @RequestBody Map<String, Object> payload) {
+        System.out.println("DEBUG: Attempting to update course: " + courseCode); // Track this in IntelliJ console
+
+        return courseRepository.findById(courseCode).map(course -> {
+            System.out.println("DEBUG: Course found! Old title: " + course.getTitle());
+
+            course.setTitle((String) payload.get("title"));
+            course.setCredits(Integer.parseInt(payload.get("credits").toString()));
+
+            courseRepository.save(course);
+            System.out.println("DEBUG: Save command sent to MySQL.");
+
+            return ResponseEntity.ok("Success");
+        }).orElseGet(() -> {
+            System.out.println("DEBUG: ERROR - Course code " + courseCode + " was not found.");
+            return ResponseEntity.notFound().build();
+        });
+    }
 }

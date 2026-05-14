@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Course Catalog</title>
+    <!-- Use your existing style.css if you have one, or use the styles below -->
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; margin: 0; background-color: #f4f7f6; }
+        .sidebar { width: 250px; height: 100vh; background-color: #2c3e50; color: white; padding: 20px; position: fixed; }
+        .sidebar-header { font-size: 24px; font-weight: bold; margin-bottom: 30px; border-bottom: 1px solid #34495e; padding-bottom: 10px; }
+        .sidebar-menu { list-style: none; padding: 0; }
+        .sidebar-menu li { padding: 12px; margin-bottom: 5px; cursor: pointer; transition: 0.3s; border-radius: 4px; }
+        .sidebar-menu li:hover { background-color: #34495e; }
+        .sidebar-menu li.active { background-color: #3498db; }
+
+        .main-content { margin-left: 290px; padding: 40px; width: 100%; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; color: #333; }
+
+        .btn { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-edit { background-color: #f39c12; color: white; margin-right: 5px; }
+        .btn-danger { background-color: #e74c3c; color: white; }
+        .btn:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">UniPortal Admin</div>
+    <ul class="sidebar-menu">
+        <li onclick="window.location.href='dashboard.html'">Dashboard</li>
+        <li onclick="window.location.href='admin-add-course.html'">Add New Course</li>
+        <li class="active">Manage Catalog</li>
+        <li onclick="window.location.href='register-courses.html'">Student View</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <h1>Course Catalog Management</h1>
+    <p>Use this panel to update course details or remove outdated modules from the system.</p>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr>
+                <th>Code</th>
+                <th>Course Title</th>
+                <th>Credits</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="adminCourseTableBody">
+            <!-- Rows will be injected here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // 1. Fetch all courses and display them in the table
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/api/courses/all') // Uses your existing GET endpoint
+            .then(response => response.json())
+            .then(courses => {
+                const tableBody = document.getElementById('adminCourseTableBody');
+                tableBody.innerHTML = '';
+
+                courses.forEach(course => {
+                    const row = `
+                            <tr>
+                                <td><strong>${course.courseCode}</strong></td>
+                                <td>${course.title}</td>
+                                <td>${course.credits}</td>
+                                <td>${course.category || course.course_type || 'N/A'}</td>
+                                <td>
+                                    <button class="btn btn-edit" onclick="editCourse('${course.courseCode}')">Edit</button>
+                                    <button class="btn btn-danger" onclick="deleteCourse('${course.courseCode}')">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                    tableBody.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Error loading courses:', error));
+    });
+
+    // 2. The Delete Function
+    function deleteCourse(courseCode) {
+        const isConfirmed = confirm(`⚠️ Are you sure you want to permanently delete course: ${courseCode}?`);
+
+        if (isConfirmed) {
+            fetch(`/api/courses/delete/${courseCode}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Course deleted successfully!");
+                        window.location.reload(); // Hard refresh to show updated list
+                    } else {
+                        alert("Could not delete. The course might have registered students.");
+                    }
+                })
+                .catch(error => alert("Server error occurred during deletion."));
+        }
+    }
+
+    // 3. The Edit Redirect (Placeholder for your next step)
+    function editCourse(courseCode) {
+        // This will eventually take the admin to your "Course Details & Edit Page"
+        alert("Redirecting to edit page for: " + courseCode);
+        window.location.href = `admin-edit-course.html?code=${courseCode}`;
+    }
+</script>
+
+</body>
+</html>
