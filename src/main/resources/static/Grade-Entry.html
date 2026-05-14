@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grade Entry - UniPortal</title>
+  <style>
+    /* General Reset and Font - Matching dashboard.html */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #f8f9fa;
+    }
+
+    /* --- SIDEBAR STYLING --- */
+    .sidebar {
+      width: 250px;
+      background-color: #212529;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .sidebar-header {
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 1px solid #343a40;
+    }
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-grow: 1;
+    }
+    .sidebar-menu li {
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+      color: #adb5bd;
+    }
+    .sidebar-menu li:hover {
+      background-color: #343a40;
+      color: white;
+    }
+    .sidebar-menu li.active {
+      background-color: #343a40;
+      color: white;
+      border-left: 4px solid #007bff;
+    }
+    .logout-btn {
+      padding: 15px 20px;
+      color: #dc3545;
+      cursor: pointer;
+      border-top: 1px solid #343a40;
+      transition: background 0.3s;
+    }
+    .logout-btn:hover {
+      background-color: #343a40;
+    }
+
+    /* --- MAIN CONTENT STYLING --- */
+    .main-content {
+      flex-grow: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .header-row h1 {
+      margin: 0;
+      color: #333;
+    }
+    .badge {
+      background-color: #007bff;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* --- CARDS & FORMS --- */
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border: 1px solid #e9ecef;
+      margin-bottom: 30px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-title::before {
+      content: '';
+      width: 4px;
+      height: 18px;
+      background: #007bff;
+      border-radius: 2px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6c757d;
+      text-transform: uppercase;
+    }
+    .form-group input, .form-group select {
+      padding: 10px;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: #007bff;
+    }
+
+    .btn-row {
+      margin-top: 25px;
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+    .btn-primary { background-color: #007bff; color: white; }
+    .btn-secondary { background-color: #6c757d; color: white; }
+    .btn-danger { background-color: #dc3545; color: white; }
+    .btn:hover { opacity: 0.9; }
+
+    /* --- TABLE STYLING --- */
+    .table-wrap {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th {
+      text-align: left;
+      padding: 12px;
+      background-color: #f8f9fa;
+      color: #495057;
+      font-size: 13px;
+      text-transform: uppercase;
+      border-bottom: 2px solid #dee2e6;
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+      color: #333;
+    }
+    tr:hover { background-color: #fdfdfd; }
+
+    .grade-badge {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .grade-a { background: #d1e7dd; color: #0f5132; }
+    .grade-b { background: #cfe2ff; color: #084298; }
+    .grade-c { background: #fff3cd; color: #856404; }
+    .grade-d { background: #f8d7da; color: #842029; }
+    .grade-f { background: #f8d7da; color: #842029; }
+    .grade-p { background: #d1e7dd; color: #0f5132; }
+
+    /* --- MODAL --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      width: 400px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .modal h2 { margin-top: 0; font-size: 20px; }
+
+    /* --- TOAST --- */
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 5px;
+      color: white;
+      display: none;
+      z-index: 2000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .toast-success { background-color: #28a745; }
+    .toast-error { background-color: #dc3545; }
+    .toast-info { background-color: #007bff; }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .search-row input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    UniPortal
+  </div>
+  <ul class="sidebar-menu">
+    <li onclick="window.location.href='dashboard.html'">🏠 Dashboard</li>
+    <li onclick="window.location.href='register-courses.html'">📚 Register Courses</li>
+    <li onclick="window.location.href='transcript.html'">📋 My Transcript</li>
+    <li onclick="window.location.href='profile.html'">👤 Update Profile</li>
+    <li class="active">📝 Grade Entry (Faculty)</li>
+  </ul>
+  <div class="logout-btn" onclick="logout()">
+    Logout
+  </div>
+</div>
+
+<div class="main-content">
+
+  <div class="header-row">
+    <h1>📝 Grade Entry Portal</h1>
+    <div class="badge">Spring 2026 / Faculty</div>
+  </div>
+
+  <!-- Submit Grade Card -->
+  <div class="card">
+    <div class="card-title">Submit Student Grade</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Student Email</label>
+        <input type="email" id="studentEmail" placeholder="e.g. john@university.edu">
+      </div>
+      <div class="form-group">
+        <label>Course Code</label>
+        <input type="text" id="courseCode" placeholder="e.g. CS101">
+      </div>
+      <div class="form-group">
+        <label>Course Title</label>
+        <input type="text" id="courseTitle" placeholder="e.g. Intro to Java">
+      </div>
+      <div class="form-group">
+        <label>Credit Hours</label>
+        <input type="number" id="credits" min="1" max="6" value="3">
+      </div>
+      <div class="form-group">
+        <label>Grade Type</label>
+        <select id="gradeType" onchange="toggleGradeOptions()">
+          <option value="LETTER">Letter Grade (A-F)</option>
+          <option value="PASSFAIL">Pass / Fail</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Grade Value</label>
+        <select id="gradeValue">
+          <option value="A+">A+</option>
+          <option value="A">A</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B" selected>B</option>
+          <option value="B-">B-</option>
+          <option value="C+">C+</option>
+          <option value="C">C</option>
+          <option value="C-">C-</option>
+          <option value="D+">D+</option>
+          <option value="D">D</option>
+          <option value="F">F</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Semester</label>
+        <input type="text" id="semester" value="Spring 2026">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="submitGrade()">Submit Grade</button>
+      <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+    </div>
+  </div>
+
+  <!-- Manage Grades Card -->
+  <div class="card">
+    <div class="card-title">Manage Grades by Course</div>
+    <div class="search-row">
+      <input type="text" id="searchCourse" placeholder="Enter Course Code (e.g. CS101)">
+      <button class="btn btn-primary" onclick="loadCourseGrades()">Search</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+        <tr>
+          <th>Email</th>
+          <th>Course</th>
+          <th>Credits</th>
+          <th>Grade</th>
+          <th>Semester</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="gradesBody">
+        <tr>
+          <td colspan="6" style="text-align: center; color: #999; padding: 30px;">
+            Search for a course code to see grades.
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Update Modal -->
+<div class="modal-overlay" id="updateModal">
+  <div class="modal">
+    <h2>Modify Grade</h2>
+    <input type="hidden" id="editId">
+    <div class="form-group" style="margin-bottom: 15px;">
+      <label>Grade Type</label>
+      <select id="editGradeType" onchange="toggleEditOptions()" style="width: 100%;">
+        <option value="LETTER">Letter Grade</option>
+        <option value="PASSFAIL">Pass / Fail</option>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom: 15px;">
+      <label>New Grade Value</label>
+      <select id="editGradeValue" style="width: 100%;">
+        <!-- Dynamic -->
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom: 15px;">
+      <label>Semester</label>
+      <input type="text" id="editSemester" style="width: 100%;">
+    </div>
+    <div class="btn-row" style="justify-content: flex-end;">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveUpdate()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  const API = '/api/grades';
+
+  // UI Logic
+  function toggleGradeOptions() {
+    const type = document.getElementById('gradeType').value;
+    const gradeSelect = document.getElementById('gradeValue');
+    gradeSelect.innerHTML = (type === 'PASSFAIL')
+            ? '<option value="P">P – Pass</option><option value="F">F – Fail</option>'
+            : `<option>A+</option><option>A</option><option>A-</option>
+               <option>B+</option><option selected>B</option><option>B-</option>
+               <option>C+</option><option>C</option><option>C-</option>
+               <option>D+</option><option>D</option><option>F</option>`;
+  }
+
+  function toggleEditOptions() {
+    const type = document.getElementById('editGradeType').value;
+    const sel  = document.getElementById('editGradeValue');
+    sel.innerHTML = (type === 'PASSFAIL')
+            ? '<option value="P">P – Pass</option><option value="F">F – Fail</option>'
+            : `<option>A+</option><option>A</option><option>A-</option>
+               <option>B+</option><option>B</option><option>B-</option>
+               <option>C+</option><option>C</option><option>C-</option>
+               <option>D+</option><option>D</option><option>F</option>`;
+  }
+
+  async function submitGrade() {
+    const payload = {
+      studentEmail: document.getElementById('studentEmail').value.trim(),
+      courseCode:   document.getElementById('courseCode').value.trim().toUpperCase(),
+      courseTitle:  document.getElementById('courseTitle').value.trim(),
+      credits:      parseInt(document.getElementById('credits').value),
+      gradeValue:   document.getElementById('gradeValue').value,
+      gradeType:    document.getElementById('gradeType').value,
+      semester:     document.getElementById('semester').value.trim()
+    };
+
+    if (!payload.studentEmail || !payload.courseCode) {
+      showToast('Email and Course Code are required', 'error');
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API}/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        showToast('Grade submitted successfully!', 'success');
+        clearForm();
+      } else {
+        const msg = await res.text();
+        showToast(msg, 'error');
+      }
+    } catch (e) {
+      showToast('Server error', 'error');
+    }
+  }
+
+  async function loadCourseGrades() {
+    const code = document.getElementById('searchCourse').value.trim().toUpperCase();
+    if (!code) return;
+
+    try {
+      const res = await fetch(`${API}/course/${code}`);
+      const data = await res.json();
+      renderTable(data);
+    } catch (e) {
+      showToast('Failed to load grades', 'error');
+    }
+  }
+
+  function renderTable(records) {
+    const tbody = document.getElementById('gradesBody');
+    if (records.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No records found.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = records.map(r => `
+            <tr>
+                <td>${r.studentEmail}</td>
+                <td><strong>${r.courseCode}</strong><br><small>${r.courseTitle}</small></td>
+                <td>${r.credits}</td>
+                <td><span class="grade-badge ${gradeBadgeClass(r.gradeValue)}">${r.gradeValue}</span></td>
+                <td>${r.semester}</td>
+                <td>
+                    <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;" onclick="openEditModal(${r.id},'${r.gradeValue}','${r.gradeType}','${r.semester}')">Edit</button>
+                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteGrade(${r.id})">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+  }
+
+  function gradeBadgeClass(g) {
+    if (!g) return '';
+    if (g === 'P') return 'grade-p';
+    if (g.startsWith('A')) return 'grade-a';
+    if (g.startsWith('B')) return 'grade-b';
+    if (g.startsWith('C')) return 'grade-c';
+    return 'grade-f';
+  }
+
+  function openEditModal(id, val, type, sem) {
+    document.getElementById('editId').value = id;
+    document.getElementById('editGradeType').value = type;
+    document.getElementById('editSemester').value = sem;
+    toggleEditOptions();
+    document.getElementById('editGradeValue').value = val;
+    document.getElementById('updateModal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('updateModal').classList.remove('open');
+  }
+
+  async function saveUpdate() {
+    const id = document.getElementById('editId').value;
+    const payload = {
+      gradeValue: document.getElementById('editGradeValue').value,
+      gradeType:  document.getElementById('editGradeType').value,
+      semester:   document.getElementById('editSemester').value
+    };
+    const res = await fetch(`${API}/update/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      showToast('Updated!', 'success');
+      closeModal();
+      loadCourseGrades();
+    }
+  }
+
+  async function deleteGrade(id) {
+    if (!confirm('Are you sure?')) return;
+    const res = await fetch(`${API}/delete/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      showToast('Deleted', 'success');
+      loadCourseGrades();
+    }
+  }
+
+  function clearForm() {
+    document.getElementById('studentEmail').value = '';
+    document.getElementById('courseCode').value = '';
+    document.getElementById('courseTitle').value = '';
+    document.getElementById('gradeType').value = 'LETTER';
+    toggleGradeOptions();
+  }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.className = `toast-${type}`;
+    t.innerText = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
+  }
+
+  function logout() {
+    sessionStorage.clear();
+    window.location.href = 'login.html';
+  }
+</script>
+
+</body>
+</html>
