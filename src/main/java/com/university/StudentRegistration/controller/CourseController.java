@@ -4,8 +4,10 @@ import com.university.StudentRegistration.model.CoreCourse;
 import com.university.StudentRegistration.model.Course;
 import com.university.StudentRegistration.model.ElectiveCourses;
 import com.university.StudentRegistration.repository.CourseRepository;
+import com.university.StudentRegistration.repository.EnrollmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,10 @@ public class CourseController {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+
 
     @GetMapping("/all")
     public List<Course> getAllCourses(){
@@ -49,13 +55,24 @@ public class CourseController {
         return ResponseEntity.ok("Course saved successfully!");
     }
 
-    @DeleteMapping("/api/courses/delete/{courseCode}")
+    @DeleteMapping("/delete/{courseCode}")
+    @Transactional
     public ResponseEntity<String> deleteCourse(@PathVariable String courseCode) {
         try {
+            // Step A: Clear table 1
+            enrollmentRepository.deleteFromEnrollments(courseCode);
+
+            // Step B: Clear table 2 (the hidden one!)
+            enrollmentRepository.deleteFromRegistrations(courseCode);
+
+            // Step C: Finally delete the course
             courseRepository.deleteById(courseCode);
-            return ResponseEntity.ok("Course successfully removed from catalog.");
+
+            return ResponseEntity.ok("Course fully removed.");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error deleting course. It might be tied to existing student registrations.");
+            // This will now show the REAL error in your IntelliJ console
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
     }
 
