@@ -48,4 +48,14 @@ public class CourseController {
         courseRepository.save(newCourse);
         return ResponseEntity.ok("Course saved successfully!");
     }
+
+    @DeleteMapping("/api/courses/delete/{courseCode}")
+    public ResponseEntity<String> deleteCourse(@PathVariable String courseCode) {
+        try {
+            courseRepository.deleteById(courseCode);
+            return ResponseEntity.ok("Course successfully removed from catalog.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error deleting course. It might be tied to existing student registrations.");
+        }
+    }
 }
