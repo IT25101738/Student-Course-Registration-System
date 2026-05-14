@@ -1,11 +1,15 @@
 package com.university.StudentRegistration.controller;
 
+import com.university.StudentRegistration.model.CoreCourse;
 import com.university.StudentRegistration.model.Course;
+import com.university.StudentRegistration.model.ElectiveCourses;
 import com.university.StudentRegistration.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -23,5 +27,25 @@ public class CourseController {
     @PostMapping("/add")
     public Course addCourse(@RequestBody Course course){
         return courseRepository.save(course);
+    }
+
+    @PostMapping("/api/courses/add")
+    public ResponseEntity<String> addCourse(@RequestBody Map<String, Object> payload) {
+        String type = (String) payload.get("courseType");
+        String code = (String) payload.get("courseCode");
+        String title = (String) payload.get("title");
+        int credits = Integer.parseInt(payload.get("credits").toString());
+
+        Course newCourse;
+
+        // Apply Inheritance logic to decide which object to create
+        if ("CORE".equalsIgnoreCase(type)) {
+            newCourse = new CoreCourse(code, title, credits);
+        } else {
+            newCourse = new ElectiveCourses(code, title, credits);
+        }
+
+        courseRepository.save(newCourse);
+        return ResponseEntity.ok("Course saved successfully!");
     }
 }
