@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Edit Course</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="loadCourseDetails()">
+<div class="main-content">
+    <h2>Edit Course: <span id="displayCode"></span></h2>
+    <form id="updateForm">
+        <label>Title:</label>
+        <input type="text" id="updateTitle" required>
+
+        <label>Credits:</label>
+        <input type="number" id="updateCredits" min="1" max="4" required>
+
+        <button type="button" onclick="sendUpdateRequest()">Save Changes</button>
+    </form>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    document.getElementById('displayCode').innerText = code;
+
+    function loadCourseDetails() {
+        // Fetch only this specific course to fill the form
+        fetch(`/api/courses/${code}`)
+            .then(res => res.json())
+            .then(course => {
+                document.getElementById('updateTitle').value = course.title;
+                document.getElementById('updateCredits').value = course.credits;
+            });
+    }
+
+    function sendUpdateRequest() {
+        const data = {
+            title: document.getElementById('updateTitle').value,
+            credits: document.getElementById('updateCredits').value
+        };
+
+        fetch(`/api/courses/${code}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("✅ Course Updated in Database!");
+                    window.location.href = 'admin-manage-courses.html';
+                } else if (response.status === 404) {
+                    alert("❌ Error: Course Code not found in database.");
+                } else {
+                    alert("❌ Server Error: Update failed.");
+                }
+            })
+            .catch(error => alert("❌ Network Error: Could not reach server."));
+    }
+</script>
+</body>
+</html>
