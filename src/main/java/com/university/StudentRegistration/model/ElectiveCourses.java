@@ -11,7 +11,7 @@ public class ElectiveCourses extends Course{
 
     }
 
-    ElectiveCourses(String code,String title,int credits){
+    public ElectiveCourses(String code,String title,int credits){
         super(code, title, credits);
     }
 

@@ -13,10 +13,8 @@ public class EnrollmentController {
     @Autowired
     private EnrollmentRepository enrollmentRepository;
 
-    // 1. CREATE: Register for a course
     @PostMapping("/enroll")
     public Enrollment enroll(@RequestBody Enrollment enrollment) {
-        enrollment.setStatus("ENROLLED");
         return enrollmentRepository.save(enrollment);
     }
 
@@ -25,6 +23,7 @@ public class EnrollmentController {
     public List<Enrollment> getSchedule(@PathVariable Long id) {
         return enrollmentRepository.findByStudentId(id);
     }
+}
 
     // 3. UPDATE: Change enrollment status (e.g., to 'DROPPED')
     @PutMapping("/update/{id}")

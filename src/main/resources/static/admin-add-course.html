@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Add New Course</title>
+    <link rel="stylesheet" href="style.css"> <!-- Use your existing dashboard CSS -->
+</head>
+<body>
+<div class="sidebar">
+    <div class="sidebar-header">UniPortal</div>
+    <ul class="sidebar-menu">
+        <li onclick="window.location.href='dashboard.html'">Dashboard</li>
+        <li class="active">Add New Course</li>
+        <li onclick="window.location.href='register-courses.html'">View Catalog</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <h2>Course Creation Form (Admin View)</h2>
+    <div class="form-card">
+        <form id="addCourseForm">
+            <label>Course Code:</label>
+            <input type="text" id="courseCode" placeholder="e.g., IT1010" required>
+
+            <label>Course Title:</label>
+            <input type="text" id="courseTitle" placeholder="e.g., Introduction to Programming" required>
+
+            <label>Credits:</label>
+            <input type="number" id="credits" min="1" max="3" value="3" required>
+
+            <!-- Crucial: Matches your database Check Constraints -->
+            <label>Course Category:</label>
+            <select id="courseType" required>
+                <option value="CORE">Core Module</option>
+                <option value="ELECTIVE">Elective</option>
+            </select>
+
+            <button type="button" onclick="submitCourse()">Save Course to Database</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function submitCourse() {
+        const courseData = {
+            courseCode: document.getElementById('courseCode').value,
+            title: document.getElementById('courseTitle').value,
+            credits: document.getElementById('credits').value,
+            courseType: document.getElementById('courseType').value
+        };
+
+        // This is the "POST" bridge to your Spring Boot Controller
+        fetch('/api/courses/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(courseData)
+        })
+            .then(response => {
+                if(response.ok) {
+                    alert("Course added successfully!");
+                    window.location.href = 'register-courses.html';
+                }
+            });
+    }
+</script>
+</body>
+</html>

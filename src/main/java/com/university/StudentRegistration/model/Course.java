@@ -1,6 +1,7 @@
 package com.university.StudentRegistration.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -11,6 +12,8 @@ public class Course {
     private String courseCode;
     private String title;
     private int credits;
+
+
 
     public Course(){
 
@@ -33,4 +36,14 @@ public class Course {
     public String getTitle(){
         return title;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public void setCredits(int credits) {}
 }
