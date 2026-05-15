@@ -160,7 +160,9 @@
       margin-top: 20px;
       text-align: center;
       font-weight: bold;
-      color: green;
+      padding: 12px;
+      border-radius: 6px;
+      display: none;
     }
 
   </style>
@@ -186,7 +188,7 @@
       Faculty Registration
     </li>
 
-    <li>
+    <li onclick="window.location.href='faculty-list.html'">
       Faculty List
     </li>
 
@@ -261,13 +263,52 @@
 
   async function registerFaculty() {
 
+    const fullName =
+            document.getElementById("fullName").value;
+
+    const email =
+            document.getElementById("email").value;
+
+    const department =
+            document.getElementById("department").value;
+
+    const phoneNumber =
+            document.getElementById("phoneNumber").value;
+
+    /* VALIDATION */
+
+    if(fullName.trim() === "") {
+
+      alert("Full Name is required!");
+      return;
+    }
+
+    if(email.trim() === "" || !email.includes("@")) {
+
+      alert("Enter a valid email!");
+      return;
+    }
+
+    if(department.trim() === "") {
+
+      alert("Department is required!");
+      return;
+    }
+
+    if(phoneNumber.length < 10) {
+
+      alert("Enter valid phone number!");
+      return;
+    }
+
     const faculty = {
 
-      fullName: document.getElementById("fullName").value,
-      email: document.getElementById("email").value,
-      department: document.getElementById("department").value,
-      specialization: document.getElementById("specialization").value,
-      phoneNumber: document.getElementById("phoneNumber").value
+      fullName: fullName,
+      email: email,
+      department: department,
+      specialization:
+      document.getElementById("specialization").value,
+      phoneNumber: phoneNumber
 
     };
 
@@ -283,16 +324,36 @@
 
     });
 
+    const messageDiv =
+            document.getElementById("message");
+
     if(response.ok) {
 
-      document.getElementById("message").innerHTML =
+      messageDiv.style.display = "block";
+
+      messageDiv.style.backgroundColor = "#d4edda";
+
+      messageDiv.style.color = "#155724";
+
+      messageDiv.innerHTML =
               "Faculty Registered Successfully!";
+
+      document.getElementById("fullName").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("department").value = "";
+      document.getElementById("specialization").value = "";
+      document.getElementById("phoneNumber").value = "";
 
     } else {
 
-      document.getElementById("message").innerHTML =
-              "Error Registering Faculty";
+      messageDiv.style.display = "block";
 
+      messageDiv.style.backgroundColor = "#f8d7da";
+
+      messageDiv.style.color = "#721c24";
+
+      messageDiv.innerHTML =
+              "Error Registering Faculty";
     }
   }
 
