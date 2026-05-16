@@ -2,22 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Add New Course</title>
-    <link rel="stylesheet" href="style.css"> <!-- Use your existing dashboard CSS -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            margin: 0;
+            background-color: #f4f7f6;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            position: fixed;
+        }
+
+        .sidebar-header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #34495e;
+            padding-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            padding: 12px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 4px;
+        }
+
+        .sidebar-menu li:hover {
+            background-color: #34495e;
+        }
+
+        .sidebar-menu li.active {
+            background-color: #3498db;
+        }
+
+        .main-content {
+            margin-left: 290px;
+            padding: 40px;
+            width: 100%;
+        }
+
+        /* Form container matches your data table container shadow and padding */
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+
+        .main-content h2 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 24px;
+            font-weight: bold;
+        }
+
+        /* Clean unified form styling to integrate with flat dashboard aesthetic */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 15px;
+            color: #333;
+            outline: none;
+            margin-bottom: 20px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: #3498db;
+        }
+
+        /* Primary layout submit button matched to your active theme color #3498db */
+        .btn-submit {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
+
 <div class="sidebar">
-    <div class="sidebar-header">UniPortal</div>
+    <div class="sidebar-header">UniPortal Admin</div>
     <ul class="sidebar-menu">
         <li onclick="window.location.href='dashboard.html'">Dashboard</li>
         <li class="active">Add New Course</li>
-        <li onclick="window.location.href='register-courses.html'">View Catalog</li>
+        <li onclick="window.location.href='admin-manage-courses.html'">Manage Catalog</li>
+        <li onclick="window.location.href='register-courses.html'">Student View</li>
     </ul>
 </div>
 
 <div class="main-content">
     <h2>Course Creation Form (Admin View)</h2>
-    <div class="form-card">
+    <div class="card">
         <form id="addCourseForm">
             <label>Course Code:</label>
             <input type="text" id="courseCode" placeholder="e.g., IT1010" required>
@@ -28,14 +145,13 @@
             <label>Credits:</label>
             <input type="number" id="credits" min="1" max="3" value="3" required>
 
-            <!-- Crucial: Matches your database Check Constraints -->
             <label>Course Category:</label>
             <select id="courseType" required>
                 <option value="CORE">Core Module</option>
                 <option value="ELECTIVE">Elective</option>
             </select>
 
-            <button type="button" onclick="submitCourse()">Save Course to Database</button>
+            <button type="button" class="btn-submit" onclick="submitCourse()">Save Course to Database</button>
         </form>
     </div>
 </div>
@@ -49,7 +165,6 @@
             courseType: document.getElementById('courseType').value
         };
 
-        // This is the "POST" bridge to your Spring Boot Controller
         fetch('/api/courses/add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -58,9 +173,12 @@
             .then(response => {
                 if(response.ok) {
                     alert("Course added successfully!");
-                    window.location.href = 'register-courses.html';
+                    window.location.href = 'admin-manage-courses.html';
+                } else {
+                    alert("Server error: Could not save course.");
                 }
-            });
+            })
+            .catch(error => alert("Network error. Check your backend console logs."));
     }
 </script>
 </body>
