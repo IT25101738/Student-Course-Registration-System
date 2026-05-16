@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -20,4 +21,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     @Query(value = "DELETE FROM course_registrations WHERE course_code = :courseCode", nativeQuery = true)
     void deleteFromRegistrations(@Param("courseCode") String courseCode);
 
+    // Add this exact line below:
+    List<Enrollment> findByStudentId(Long studentId);
 }
