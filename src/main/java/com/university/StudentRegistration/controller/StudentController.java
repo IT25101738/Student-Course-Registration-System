@@ -6,39 +6,36 @@ import com.university.StudentRegistration.model.GraduateStudent;
 import com.university.StudentRegistration.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
-@RestController // tells the spring this class handles web requests
+@RestController // tells spring this class handles web requests
 @RequestMapping("/api/students") // base URL (so all endpoints starts with /api/students)
 public class StudentController {
 
-    @Autowired //spring automatically injects the repository here
+    @Autowired // spring automatically injects the repository database connection here
     private StudentRepository studentRepository;
 
-    // CREATE: Register a new student (UPDATED FOR POLYMORPHISM)
+    // CREATE: Register a new student
     @PostMapping("/register") // post use to assign values to db
     public Student createStudent(@RequestBody java.util.Map<String, String> requestData) {
 
-        // 1. Extract the data sent from our new HTML form
+        // extract the raw text data sent from our HTML form
         String type = requestData.get("type");
         String name = requestData.get("name");
         String email = requestData.get("email");
         String major = requestData.get("major");
         String password = requestData.get("password");
-        String extraInfo = requestData.get("extraInfo"); // This will be either High School or Thesis
+        String extraInfo = requestData.get("extraInfo");
 
+        //declare a parent variable
         Student newStudent;
 
-        // 2. POLYMORPHISM: Decide which exact object to create based on the dropdown!
         if ("GRAD".equals(type)) {
-            // Use the GraduateStudent constructor
             newStudent = new GraduateStudent(name, email, major, password, extraInfo);
         } else {
-            // Use the UndergraduateStudent constructor
             newStudent = new UndergraduateStudent(name, email, major, password, extraInfo);
         }
 
-        // 3. Save it. Spring Boot and Hibernate are smart enough to save the child class data!
+        //save it to the database.
         return studentRepository.save(newStudent);
     }
 
@@ -46,14 +43,15 @@ public class StudentController {
     @PostMapping("/login")
     public Student loginStudent(@RequestBody Student loginRequest) {
 
-        // first ask the repository to search the database for this email
+        // first ask the repository to search the database for this specific email
         Student existingStudent = studentRepository.findByEmail(loginRequest.getEmail());
 
-        // then check if the student exists and if the password matches
+        // then check if the student actually exists AND if the passwords match exactly
         if (existingStudent != null && existingStudent.getPassword().equals(loginRequest.getPassword())) {
-            return existingStudent; // Success! Send the student data back to the UI.
+            return existingStudent;
         } else {
-            throw new RuntimeException("Invalid email or password"); // Fail!
+            // EXCEPTION HANDLING
+            throw new RuntimeException("Invalid email or password");
         }
     }
 
@@ -61,15 +59,14 @@ public class StudentController {
     @PutMapping("/update")
     public Student updateStudentProfile(@RequestBody Student updatedData) {
 
-        // 1. Search the database for the student's email
+        //Search the database for the student using the email they typed
         Student existingStudent = studentRepository.findByEmail(updatedData.getEmail());
 
         if (existingStudent != null) {
-            // 2. If found, update their Name and Major
             existingStudent.setName(updatedData.getName());
             existingStudent.setMajor(updatedData.getMajor());
 
-            // 3. Save the changes back to MySQL
+            //Save the modified object back into MySQL
             return studentRepository.save(existingStudent);
         } else {
             throw new RuntimeException("Student not found!");
@@ -80,21 +77,18 @@ public class StudentController {
     @DeleteMapping("/delete")
     public void deleteStudentAccount(@RequestBody java.util.Map<String, String> requestData) {
 
-        // 1. Get the email AND password from the frontend request
+        // get the email AND password from the frontend Danger Zone
         String email = requestData.get("email");
         String password = requestData.get("password");
 
-        // 2. Search for the student
+        //Search for the student in the database
         Student studentToDelete = studentRepository.findByEmail(email);
 
-        // 3. SECURITY CHECK: Do they exist, and does the password match?
         if (studentToDelete != null && studentToDelete.getPassword().equals(password)) {
-            // 4. If everything matches perfectly, delete them
             studentRepository.delete(studentToDelete);
         } else {
-            // If the password is wrong or email doesn't exist, block it!
+            // Exception Handling
             throw new RuntimeException("Security Error: Invalid email or password.");
         }
     }
-
 }
