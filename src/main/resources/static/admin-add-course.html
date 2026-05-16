@@ -128,7 +128,7 @@
         <li onclick="window.location.href='dashboard.html'">Dashboard</li>
         <li class="active">Add New Course</li>
         <li onclick="window.location.href='admin-manage-courses.html'">Manage Catalog</li>
-        <li onclick="window.location.href='register-courses.html'">Student View</li>
+        <li onclick="window.location.href='course-catalog.html'">Student View</li>
     </ul>
 </div>
 
@@ -151,6 +151,9 @@
                 <option value="ELECTIVE">Elective</option>
             </select>
 
+            <label>Course Description:</label>
+            <textarea id="courseDescription" placeholder="Enter course syllabus overview..." rows="4" required style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:4px; margin-bottom:20px; font-family:inherit;"></textarea>
+
             <button type="button" class="btn-submit" onclick="submitCourse()">Save Course to Database</button>
         </form>
     </div>
@@ -162,7 +165,8 @@
             courseCode: document.getElementById('courseCode').value,
             title: document.getElementById('courseTitle').value,
             credits: document.getElementById('credits').value,
-            courseType: document.getElementById('courseType').value
+            courseType: document.getElementById('courseType').value,
+            description: document.getElementById('courseDescription').value
         };
 
         fetch('/api/courses/add', {

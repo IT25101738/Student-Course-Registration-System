@@ -129,7 +129,7 @@
         <li onclick="window.location.href='dashboard.html'">Dashboard</li>
         <li onclick="window.location.href='admin-add-course.html'">Add New Course</li>
         <li class="active" onclick="window.location.href='admin-manage-courses.html'">Manage Catalog</li>
-        <li onclick="window.location.href='register-courses.html'">Student View</li>
+        <li onclick="window.location.href='course-catalog.html'">Student View</li>
     </ul>
 </div>
 
@@ -142,6 +142,9 @@
 
             <label>Credits:</label>
             <input type="number" id="updateCredits" min="1" max="4" required>
+
+            <label>Description:</label>
+            <textarea id="updateDescription" rows="4" required style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:4px; margin-bottom:20px; font-family:inherit;"></textarea>
 
             <button type="button" class="btn-submit" onclick="sendUpdateRequest()">Save Changes</button>
         </form>
@@ -159,6 +162,7 @@
             .then(course => {
                 document.getElementById('updateTitle').value = course.title;
                 document.getElementById('updateCredits').value = course.credits;
+                document.getElementById('updateDescription').value = course.description || '';
             })
             .catch(err => console.error("Could not fetch course details:", err));
     }
@@ -166,7 +170,8 @@
     function sendUpdateRequest() {
         const data = {
             title: document.getElementById('updateTitle').value,
-            credits: parseInt(document.getElementById('updateCredits').value, 10) // Parsed cleanly as a true integer for safety
+            credits: parseInt(document.getElementById('updateCredits').value, 10), // Parsed cleanly as a true integer for safety
+            description: document.getElementById('updateDescription').value
         };
 
         fetch(`/api/courses/${code}`, {

@@ -12,6 +12,7 @@ public class Course {
     private String courseCode;
     private String title;
     private int credits;
+    private String description;
 
     //course enrollment part................
     private int maxCapacity = 50; // Default capacity
@@ -58,5 +59,13 @@ public class Course {
 
     public void setCredits(int credits) {
         this.credits = credits;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

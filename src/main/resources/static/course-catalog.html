@@ -184,7 +184,7 @@
                 <th>Course Title</th>
                 <th>Credits</th>
                 <th>Type</th>
-                <th>Action</th>
+                <th>Information</th>
             </tr>
             </thead>
             <tbody id="courseTableBody">
@@ -211,8 +211,9 @@
                                 <td>${course.credits}</td>
                                 <td>${course.category}</td>
                                 <td>
-                                    <button class="btn-register" onclick="performRegistration('${course.courseCode}')">
-                                        Register
+                                    <button onclick="viewDetails('${course.title}', '${course.description || 'No description available for this module.'}')"
+                                            style="background-color: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                                        View Details
                                     </button>
                                 </td>
                             </tr>
@@ -263,6 +264,11 @@
                 }
             })
             .catch(error => console.error('Error:', error));
+    }
+
+    function viewDetails(title, description) {
+        // This utilizes a clean system modal to showcase the expanded summary text block safely
+        alert(`📘 Course: ${title}\n\n📝 Syllabus Details:\n${description}`);
     }
 </script>
 </body>

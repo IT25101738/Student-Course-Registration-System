@@ -37,6 +37,7 @@ public class CourseController {
         String type = (String) payload.get("courseType");
         String code = (String) payload.get("courseCode");
         String title = (String) payload.get("title");
+        String description = (String) payload.get("description");
         int credits = Integer.parseInt(payload.get("credits").toString());
 
         Course newCourse;
@@ -48,6 +49,7 @@ public class CourseController {
             newCourse = new ElectiveCourses(code, title, credits);
         }
 
+        newCourse.setDescription(description);
         courseRepository.save(newCourse);
         return ResponseEntity.ok("Course saved successfully!");
     }
@@ -78,6 +80,7 @@ public class CourseController {
             // Encapsulation: Safely using setters
             course.setTitle((String) payload.get("title"));
             course.setCredits(Integer.parseInt(payload.get("credits").toString()));
+            course.setDescription((String) payload.get("description"));
 
             courseRepository.save(course);
             return ResponseEntity.ok("Success");
