@@ -18,6 +18,11 @@ public class CourseRegistration {
         this.studentEmail=studentEmail;
         this.courseCode=courseCode;
     }
+    //ADDED THIS GETTER SO SPRING BOOT CAN READ THE ID
+    public Long getId() {
+        return id;
+
+    }
 
     public String getStudentEmail() {
         return studentEmail;

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drop Course - UniPortal</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f8f9fa; }
+        .sidebar { width: 250px; background-color: #212529; color: white; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 20px; font-size: 24px; font-weight: bold; border-bottom: 1px solid #343a40; }
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+        .sidebar-menu li { padding: 15px 20px; cursor: pointer; transition: background 0.3s; color: #adb5bd; }
+        .sidebar-menu li:hover { background-color: #343a40; color: white; }
+        .sidebar-menu li.active { background-color: #343a40; color: white; border-left: 4px solid #007bff; }
+        .logout-btn { padding: 15px 20px; color: #dc3545; cursor: pointer; border-top: 1px solid #343a40; transition: background 0.3s;}
+        .logout-btn:hover { background-color: #343a40; }
+        .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; }
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .header-row h1 { margin: 0; color: #333; }
+        .uni-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #f5c6cb; background-color: #f8d7da; }
+        .course-table { width: 100%; border-collapse: collapse; text-align: left; background: white; border-radius: 8px; overflow: hidden; }
+        .course-table th { padding: 12px; border-bottom: 2px solid #f0f0f0; color: #666; font-size: 14px; }
+        .course-table td { padding: 15px 12px; border-bottom: 1px solid #f9f9f9; color: #333; }
+        .btn-drop { background-color: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-drop:hover { background-color: #c82333; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">UniPortal</div>
+    <ul class="sidebar-menu">
+        <li onclick="window.location.href='dashboard.html'">Dashboard</li>
+        <li onclick="window.location.href='enroll-courses.html'">Enroll Courses</li>
+        <li onclick="window.location.href='my-schedule.html'">My Schedule</li>
+        <li class="active">Drop Course</li>
+        <li onclick="window.location.href='profile.html'">Update Profile</li>
+    </ul>
+    <div class="logout-btn" onclick="logout()">Logout</div>
+</div>
+
+<div class="main-content">
+    <div class="header-row">
+        <h1>Manage / Drop Courses</h1>
+    </div>
+    <div class="uni-card">
+        <p style="color: #721c24; margin-top: 0;"><strong>Warning:</strong> Dropping a course is permanent. You will need to re-enroll if you change your mind.</p>
+        <table class="course-table">
+            <thead>
+            <tr>
+                <th>Registration ID</th>
+                <th>Course Code</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="dropTableBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const studentEmail = sessionStorage.getItem("loggedInStudentEmail");
+    if (!studentEmail) {
+        window.location.href = "login.html";
+    }
+
+    function loadDropSchedule() {
+        fetch(`http://localhost:8080/api/registrations/my-schedule/${studentEmail}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('dropTableBody');
+                tableBody.innerHTML = '';
+                if(data.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="3">No courses to drop.</td></tr>';
+                    return;
+                }
+                data.forEach(reg => {
+                    tableBody.innerHTML += `<tr><td>#${reg.id}</td><td><strong>${reg.courseCode}</strong></td><td><button class="btn-drop" onclick="dropCourse(${reg.id})">Drop</button></td></tr>`;
+                });
+            })
+            .catch(error => console.error('Error loading schedule:', error));
+    }
+
+    function dropCourse(registrationId) {
+        if(confirm("Are you sure you want to drop this course?")) {
+            fetch(`http://localhost:8080/api/registrations/drop/${registrationId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if(response.ok) {
+                    alert("Course successfully dropped.");
+                    loadDropSchedule(); // Reloads the table immediately
+                }
+            })
+            .catch(error => console.error('Error dropping course:', error));
+        }
+    }
+
+    window.onload = loadDropSchedule;
+
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+    }
+</script>
+</body>
+</html>
