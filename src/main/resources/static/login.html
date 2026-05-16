@@ -84,6 +84,7 @@
             // Save their name in the browser so the dashboard knows who they are
             sessionStorage.setItem("loggedInStudentName", studentData.name);
             sessionStorage.setItem("loggedInStudentMajor", studentData.major);
+            sessionStorage.setItem("loggedInStudentEmail", studentData.email);
 
             // Teleport them to the Dashboard!
             window.location.href = "dashboard.html";
