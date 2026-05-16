@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Registration - UniPortal</title>
+    <style>
+        /* General Reset and Font */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        /* --- SIDEBAR STYLING (matches existing pages) --- */
+        .sidebar {
+            width: 250px;
+            background-color: #212529;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 1px solid #343a40;
+        }
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+        .sidebar-menu li {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            color: #adb5bd;
+        }
+        .sidebar-menu li:hover {
+            background-color: #343a40;
+            color: white;
+        }
+        .sidebar-menu li.active {
+            background-color: #343a40;
+            color: white;
+            border-left: 4px solid #007bff;
+        }
+        .logout-btn {
+            padding: 15px 20px;
+            color: #dc3545;
+            cursor: pointer;
+            border-top: 1px solid #343a40;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover { background-color: #343a40; }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+        .page-subtitle {
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        /* --- FORM CARD --- */
+        .form-card {
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border: 1px solid #e9ecef;
+            max-width: 600px;
+        }
+        .form-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #6c757d;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 6px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #212529;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+        /* Type toggle radio buttons */
+        .type-selector {
+            display: flex;
+            gap: 12px;
+        }
+        .type-option {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .type-option input[type="radio"] { display: none; }
+        .type-option .type-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #495057;
+        }
+        .type-option .type-desc {
+            font-size: 12px;
+            color: #adb5bd;
+            margin-top: 4px;
+        }
+        .type-option.selected {
+            border-color: #007bff;
+            background-color: #f0f7ff;
+        }
+        .type-option.selected .type-label { color: #007bff; }
+
+        /* Conditional extra field */
+        .extra-field { display: none; }
+        .extra-field.visible { display: block; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .submit-btn:hover { background-color: #0056b3; }
+
+        /* Alert message */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-top: 16px;
+            display: none;
+        }
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="sidebar-header">UniPortal</div>
+    <ul class="sidebar-menu">
+        <li onclick="window.location.href='dashboard.html'">Dashboard</li>
+        <li class="active">Register Faculty</li>
+        <li onclick="window.location.href='faculty-directory.html'">Faculty Directory</li>
+        <li onclick="window.location.href='faculty-assign.html'">Course Assignment</li>
+    </ul>
+    <div class="logout-btn" onclick="logout()">Logout</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+    <div class="page-title">Faculty Registration</div>
+    <div class="page-subtitle">Add a new professor or instructor to the university system.</div>
+
+    <div class="form-card">
+
+        <!-- Faculty Type Selector -->
+        <div class="form-section-title">Faculty Type</div>
+        <div class="form-group">
+            <div class="type-selector">
+                <label class="type-option selected" id="opt-fulltime" onclick="selectType('FULLTIME')">
+                    <input type="radio" name="type" value="FULLTIME" checked>
+                    <div class="type-label">Full-Time Professor</div>
+                    <div class="type-desc">Max 4 courses / semester</div>
+                </label>
+                <label class="type-option" id="opt-adjunct" onclick="selectType('ADJUNCT')">
+                    <input type="radio" name="type" value="ADJUNCT">
+                    <div class="type-label">Adjunct Professor</div>
+                    <div class="type-desc">Max 2 courses / semester</div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Basic Details -->
+        <div class="form-section-title" style="margin-top:24px;">Personal Details</div>
+
+        <div class="form-group">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" placeholder="e.g. Dr. Sarah Johnson">
+        </div>
+        <div class="form-group">
+            <label for="reg-dept">Department</label>
+            <input type="text" id="reg-dept" placeholder="e.g. Computer Science">
+        </div>
+        <div class="form-group">
+            <label for="reg-empid">Employee ID</label>
+            <input type="text" id="reg-empid" placeholder="e.g. FAC-001">
+        </div>
+        <div class="form-group">
+            <label for="reg-email">Email Address</label>
+            <input type="email" id="reg-email" placeholder="e.g. sarah.johnson@university.edu">
+        </div>
+        <div class="form-group">
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" placeholder="Set a secure password">
+        </div>
+
+        <!-- Conditional: Office Hours (Full-Time only) -->
+        <div class="extra-field visible" id="field-office-hours">
+            <div class="form-group">
+                <label for="reg-office">Office Hours</label>
+                <input type="text" id="reg-office" placeholder="e.g. Mon/Wed 10:00–12:00">
+            </div>
+        </div>
+
+        <!-- Conditional: Contract End Date (Adjunct only) -->
+        <div class="extra-field" id="field-contract-date">
+            <div class="form-group">
+                <label for="reg-contract">Contract End Date</label>
+                <input type="date" id="reg-contract">
+            </div>
+        </div>
+
+        <button class="submit-btn" onclick="registerFaculty()">Register Faculty Member</button>
+        <div class="alert" id="reg-alert"></div>
+    </div>
+</div>
+
+<script>
+    let selectedType = 'FULLTIME';
+
+    // Toggle the faculty type selection UI and conditional fields
+    function selectType(type) {
+        selectedType = type;
+        document.getElementById('opt-fulltime').classList.toggle('selected', type === 'FULLTIME');
+        document.getElementById('opt-adjunct').classList.toggle('selected', type === 'ADJUNCT');
+        document.getElementById('field-office-hours').classList.toggle('visible', type === 'FULLTIME');
+        document.getElementById('field-contract-date').classList.toggle('visible', type === 'ADJUNCT');
+    }
+
+    // POST to /api/faculty/register
+    async function registerFaculty() {
+        const name       = document.getElementById('reg-name').value.trim();
+        const department = document.getElementById('reg-dept').value.trim();
+        const employeeId = document.getElementById('reg-empid').value.trim();
+        const email      = document.getElementById('reg-email').value.trim();
+        const password   = document.getElementById('reg-password').value;
+
+        // Extra info depends on which type is selected
+        let extraInfo = selectedType === 'FULLTIME'
+            ? document.getElementById('reg-office').value.trim()
+            : document.getElementById('reg-contract').value;
+
+        if (!name || !department || !employeeId || !email || !password) {
+            showAlert('Please fill in all required fields.', 'error');
+            return;
+        }
+
+        const payload = { type: selectedType, name, department, employeeId, email, password, extraInfo };
+
+        try {
+            const response = await fetch('/api/faculty/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const message = await response.text();
+            if (response.ok) {
+                showAlert(message, 'success');
+                // Clear the form
+                ['reg-name','reg-dept','reg-empid','reg-email','reg-password','reg-office','reg-contract']
+                    .forEach(id => document.getElementById(id).value = '');
+            } else {
+                showAlert(message, 'error');
+            }
+        } catch (err) {
+            showAlert('Connection error: ' + err.message, 'error');
+        }
+    }
+
+    function showAlert(msg, type) {
+        const el = document.getElementById('reg-alert');
+        el.textContent = msg;
+        el.className = 'alert ' + type;
+        el.style.display = 'block';
+    }
+
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+    }
+</script>
+
+</body>
+</html>
