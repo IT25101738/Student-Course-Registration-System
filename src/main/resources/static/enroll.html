@@ -19,7 +19,7 @@
 <body>
 
 <div class="container">
-    <h2>Component 03: Course Enrollment</h2>
+    <h2>Course Enrollment Dashboard</h2>
 
     <!-- Registration Form -->
     <div>
@@ -62,9 +62,8 @@
         });
 
         if (response.ok) {
-            alert("Enrollment Successful!");
-            fetchSchedule(); // Refresh table
-        }
+    window.location.href = "success.html"; // This sends the user to your 3rd UI
+    }
     }
 
     // 2. READ: Call the GET API
