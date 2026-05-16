@@ -30,29 +30,29 @@ public class CourseController {
         return courseRepository.findAll();
     }
 
-    @PostMapping("/add")
-    public Course addCourse(@RequestBody Course course){
-        return courseRepository.save(course);
-    }
-
-    @PostMapping("/api/courses/add")
+    @PostMapping("/add") // This combines with the class mapping to make exactly "/api/courses/add"
     public ResponseEntity<String> addCourse(@RequestBody Map<String, Object> payload) {
-        String type = (String) payload.get("courseType");
-        String code = (String) payload.get("courseCode");
-        String title = (String) payload.get("title");
-        int credits = Integer.parseInt(payload.get("credits").toString());
+        try {
+            String type = (String) payload.get("courseType");
+            String code = (String) payload.get("courseCode");
+            String title = (String) payload.get("title");
+            int credits = Integer.parseInt(payload.get("credits").toString());
 
-        Course newCourse;
+            Course newCourse;
 
-        // Apply Inheritance logic to decide which object to create
-        if ("CORE".equalsIgnoreCase(type)) {
-            newCourse = new CoreCourse(code, title, credits);
-        } else {
-            newCourse = new ElectiveCourses(code, title, credits);
+            // Apply Inheritance logic to decide which object to create
+            if ("CORE".equalsIgnoreCase(type)) {
+                newCourse = new CoreCourse(code, title, credits);
+            } else {
+                newCourse = new ElectiveCourses(code, title, credits);
+            }
+
+            courseRepository.save(newCourse);
+            return ResponseEntity.ok("Course saved successfully!");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
-
-        courseRepository.save(newCourse);
-        return ResponseEntity.ok("Course saved successfully!");
     }
 
     @DeleteMapping("/delete/{courseCode}")
