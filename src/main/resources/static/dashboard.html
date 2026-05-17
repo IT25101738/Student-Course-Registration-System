@@ -166,7 +166,7 @@
     <div class="stats-row">
         <div class="stat-card">
             <h4>Registered Courses</h4>
-            <div class="value">0</div>
+            <div class="value" id="registeredCount">0</div>
         </div>
         <div class="stat-card">
             <h4>Current Major</h4>
@@ -195,6 +195,21 @@
     // Insert the user's real name and major from the database
     document.getElementById("displayName").innerText = sessionStorage.getItem("loggedInStudentName");
     document.getElementById("displayMajor").innerText = sessionStorage.getItem("loggedInStudentMajor");
+
+
+    // course count for the logged-in student
+    const studentEmail = sessionStorage.getItem("loggedInStudentEmail");
+    if (studentEmail) {
+        fetch(`http://localhost:8080/api/registrations/my-schedule/${studentEmail}`)
+            .then(response => response.json())
+            .then(data => {
+                // data is the array of registered courses. data.length is the total count.
+                document.getElementById("registeredCount").innerText = data.length;
+            })
+            .catch(error => console.error('Error fetching course count:', error));
+    }
+
+
 
     // Logout function
     function logout() {
