@@ -231,7 +231,7 @@
 
     <div class="toolbar">
         <input type="text" id="search-input" placeholder="Search by name or department..." oninput="filterTable()">
-<!--        <button class="btn btn-success" onclick="window.location.href='faculty-register.html'">+ Add Faculty</button>-->
+        <button class="btn btn-success" onclick="window.location.href='faculty-register.html'">+ Add Faculty</button>
     </div>
 
     <div class="table-card">
@@ -244,7 +244,7 @@
                 <th>Type</th>
                 <th>Max Load</th>
                 <th>Assigned Course</th>
-<!--                <th>Actions</th>-->
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody id="faculty-table-body">
@@ -336,12 +336,12 @@
                 <td>${typeLabel}</td>
                 <td>${maxLoad}</td>
                 <td>${course}</td>
-<!--                <td>-->
-<!--                    <div class="actions">-->
-<!--                        <button class="btn btn-primary btn-sm" onclick='viewProfile(${JSON.stringify(f)})'>View</button>-->
-<!--                        <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${f.employeeId}')">Delete</button>-->
-<!--                    </div>-->
-<!--                </td>-->
+                <td>
+                    <div class="actions">
+                        <button class="btn btn-primary btn-sm" onclick='viewProfile(${JSON.stringify(f)})'>View</button>
+                        <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${f.employeeId}')">Delete</button>
+                    </div>
+                </td>
             </tr>`;
         }).join('');
     }
