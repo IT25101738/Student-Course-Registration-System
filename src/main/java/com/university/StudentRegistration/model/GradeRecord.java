@@ -14,7 +14,7 @@ public class GradeRecord {
     private String examTopic;
     private double numericMark;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "grade_id")
     private Grade grade;
 
