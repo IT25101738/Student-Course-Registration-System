@@ -1,6 +1,5 @@
 package com.university.StudentRegistration.repository;
 
-import com.university.StudentRegistration.model.GradeRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
