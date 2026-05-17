@@ -167,24 +167,63 @@ public class FacultyController {
     }
 
     // -----------------------------------------------------------------------
-    // DELETE: Remove a faculty member
+    // UPDATE: Edit core faculty profile fields
+    // PUT /api/faculty/update
+    // Body: { "employeeId": "FAC-001", "name": "...", "department": "...",
+    //         "email": "...", "extraInfo": "..." }
+    // extraInfo maps to officeHours (FullTimeProfessor) or
+    // contractEndDate (AdjunctProfessor) via polymorphic instanceof check.
+    // -----------------------------------------------------------------------
+    @PutMapping("/update")
+    public ResponseEntity<String> updateFaculty(@RequestBody Map<String, String> requestData) {
+        String employeeId = requestData.get("employeeId");
+
+        Instructor instructor = instructorRepository.findByEmployeeId(employeeId);
+        if (instructor == null) {
+            return ResponseEntity.status(404).body("Error: Faculty member not found.");
+        }
+
+        // Only overwrite fields that were actually provided
+        String name       = requestData.get("name");
+        String department = requestData.get("department");
+        String email      = requestData.get("email");
+        String extraInfo  = requestData.get("extraInfo");
+
+        if (name       != null && !name.isBlank())       instructor.setName(name);
+        if (department != null && !department.isBlank()) instructor.setDepartment(department);
+        if (email      != null && !email.isBlank())      instructor.setEmail(email);
+
+        // Polymorphic dispatch: update the subclass-specific extra field
+        if (extraInfo != null && !extraInfo.isBlank()) {
+            if (instructor instanceof FullTimeProfessor) {
+                ((FullTimeProfessor) instructor).setOfficeHours(extraInfo);
+            } else if (instructor instanceof AdjunctProfessor) {
+                ((AdjunctProfessor) instructor).setContractEndDate(extraInfo);
+            }
+        }
+
+        instructorRepository.save(instructor);
+        return ResponseEntity.ok("Faculty member updated successfully.");
+    }
+
+    // -----------------------------------------------------------------------
+    // DELETE: Remove a faculty member (admin-only, no password required)
     // DELETE /api/faculty/delete
-    // Body: { "employeeId": "FAC-001", "password": "secret" }
-    // Mirrors the exact same pattern used in StudentController.java
+    // Body: { "employeeId": "FAC-001" }
+    // Admin is already authenticated via session — faculty password is not
+    // known to the admin, so we authenticate by employeeId lookup only.
     // -----------------------------------------------------------------------
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteFaculty(@RequestBody Map<String, String> requestData) {
         String employeeId = requestData.get("employeeId");
-        String password   = requestData.get("password");
 
         Instructor instructor = instructorRepository.findByEmployeeId(employeeId);
 
-        if (instructor != null && instructor.getPassword().equals(password)) {
-            instructorRepository.delete(instructor);
-            return ResponseEntity.ok("Faculty member removed successfully.");
-        } else {
-            // Exception Handling: mirrors the Student pattern
-            return ResponseEntity.status(403).body("Security Error: Invalid employee ID or password.");
+        if (instructor == null) {
+            return ResponseEntity.status(404).body("Error: Faculty member not found.");
         }
+
+        instructorRepository.delete(instructor);
+        return ResponseEntity.ok("Faculty member removed successfully.");
     }
 }

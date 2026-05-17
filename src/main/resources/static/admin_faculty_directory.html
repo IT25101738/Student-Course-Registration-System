@@ -286,16 +286,48 @@
 <div class="modal-overlay" id="delete-modal-overlay">
     <div class="modal">
         <h3 style="color:#dc3545;">⚠️ Remove Faculty Member</h3>
-        <p style="color:#495057;font-size:14px;">This action cannot be undone. Enter the faculty member's password to confirm deletion.</p>
+        <p style="color:#495057;font-size:14px;">Are you sure you want to permanently remove this faculty member? This action cannot be undone.</p>
         <input type="hidden" id="delete-empid">
-        <div class="modal-field">
-            <label style="font-size:14px;font-weight:500;color:#495057;">Password</label>
-            <input type="password" id="delete-password" placeholder="Enter faculty password"
-                   style="width:100%;padding:10px;border:1px solid #ced4da;border-radius:6px;margin-top:6px;box-sizing:border-box;">
-        </div>
+        <p id="delete-name-display" style="font-weight:600;font-size:15px;color:#212529;"></p>
         <div class="modal-actions">
             <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeDeleteModal()">Cancel</button>
             <button class="btn btn-danger" onclick="confirmDelete()">Remove Faculty</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Faculty Modal -->
+<div class="modal-overlay" id="edit-modal-overlay">
+    <div class="modal" style="max-width:520px;">
+        <h3 style="color:#212529;">✏️ Edit Faculty Member</h3>
+        <input type="hidden" id="edit-empid">
+        <div class="modal-field">
+            <label style="font-size:13px;font-weight:500;color:#6c757d;">Employee ID (read-only)</label>
+            <p id="edit-empid-display" style="font-size:15px;font-weight:600;color:#212529;margin:4px 0 0;"></p>
+        </div>
+        <div class="modal-field">
+            <label style="font-size:13px;font-weight:500;color:#495057;">Name</label>
+            <input type="text" id="edit-name"
+                   style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
+        </div>
+        <div class="modal-field">
+            <label style="font-size:13px;font-weight:500;color:#495057;">Department</label>
+            <input type="text" id="edit-department"
+                   style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
+        </div>
+        <div class="modal-field">
+            <label style="font-size:13px;font-weight:500;color:#495057;">Email</label>
+            <input type="email" id="edit-email"
+                   style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
+        </div>
+        <div class="modal-field">
+            <label style="font-size:13px;font-weight:500;color:#495057;" id="edit-extra-label">Office Hours / Contract End Date</label>
+            <input type="text" id="edit-extra"
+                   style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
+        </div>
+        <div class="modal-actions">
+            <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeEditModal()">Cancel</button>
+            <button class="btn btn-success" onclick="confirmEdit()">Save Changes</button>
         </div>
     </div>
 </div>
@@ -345,6 +377,7 @@
                 <td>
                     <div class="actions">
                         <button class="btn btn-primary btn-sm" onclick='viewProfile(${JSON.stringify(f)})'>View</button>
+                        <button class="btn btn-sm" style="background:#fd7e14;color:white;" onclick='openEditModal(${JSON.stringify(f)})'>Edit</button>
                         <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${f.employeeId}')">Delete</button>
                     </div>
                 </td>
@@ -383,8 +416,10 @@
 
     // Delete modal
     function openDeleteModal(empId) {
+        const faculty = allFaculty.find(f => f.employeeId === empId);
         document.getElementById('delete-empid').value = empId;
-        document.getElementById('delete-password').value = '';
+        document.getElementById('delete-name-display').textContent =
+            faculty ? faculty.name + ' (' + empId + ')' : empId;
         document.getElementById('delete-modal-overlay').classList.add('visible');
     }
     function closeDeleteModal() {
@@ -392,20 +427,80 @@
     }
     async function confirmDelete() {
         const employeeId = document.getElementById('delete-empid').value;
-        const password   = document.getElementById('delete-password').value;
 
         try {
             const response = await fetch('/api/faculty/delete', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ employeeId, password })
+                body: JSON.stringify({ employeeId })
             });
             const message = await response.text();
             if (response.ok) {
                 closeDeleteModal();
                 loadFaculty(); // refresh the table
             } else {
-                alert(message);
+                alert('Error: ' + message);
+            }
+        } catch (err) {
+            alert('Connection error: ' + err.message);
+        }
+    }
+
+    // Edit modal
+    function openEditModal(faculty) {
+        // Populate hidden id
+        document.getElementById('edit-empid').value = faculty.employeeId;
+        document.getElementById('edit-empid-display').textContent = faculty.employeeId;
+
+        // Populate editable fields with current values
+        document.getElementById('edit-name').value       = faculty.name       || '';
+        document.getElementById('edit-department').value = faculty.department  || '';
+        document.getElementById('edit-email').value      = faculty.email       || '';
+
+        // Determine extra field based on faculty type
+        const isAdjunct = faculty.contractEndDate !== undefined;
+        const extraLabel = document.getElementById('edit-extra-label');
+        const extraInput = document.getElementById('edit-extra');
+        if (isAdjunct) {
+            extraLabel.textContent = 'Contract End Date (e.g. 2026-12-31)';
+            extraInput.value = faculty.contractEndDate || '';
+            extraInput.placeholder = 'YYYY-MM-DD';
+        } else {
+            extraLabel.textContent = 'Office Hours (e.g. Mon/Wed 10:00–12:00)';
+            extraInput.value = faculty.officeHours || '';
+            extraInput.placeholder = 'Mon/Wed 10:00–12:00';
+        }
+
+        document.getElementById('edit-modal-overlay').classList.add('visible');
+    }
+    function closeEditModal() {
+        document.getElementById('edit-modal-overlay').classList.remove('visible');
+    }
+    async function confirmEdit() {
+        const employeeId = document.getElementById('edit-empid').value;
+        const name       = document.getElementById('edit-name').value.trim();
+        const department = document.getElementById('edit-department').value.trim();
+        const email      = document.getElementById('edit-email').value.trim();
+        const extraInfo  = document.getElementById('edit-extra').value.trim();
+
+        // Basic frontend validation
+        if (!name || !department || !email) {
+            alert('Name, Department, and Email are required.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/faculty/update', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ employeeId, name, department, email, extraInfo })
+            });
+            const message = await response.text();
+            if (response.ok) {
+                closeEditModal();
+                loadFaculty(); // refresh the table
+            } else {
+                alert('Error: ' + message);
             }
         } catch (err) {
             alert('Connection error: ' + err.message);
