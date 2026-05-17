@@ -1,8 +1,10 @@
 package com.university.StudentRegistration.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.DiscriminatorValue;
 
 @Entity // tells spring the class is a database table
+@DiscriminatorValue("GRADUATE")
 public class GraduateStudent extends Student {
     private String researchThesisTitle;
 
@@ -26,5 +28,10 @@ public class GraduateStudent extends Student {
     @Override
     public String getProfileDisplayFormat() {
         return super.getProfileDisplayFormat() + " [Status: Graduate Researcher]";
+    }
+
+    @Override
+    public String getStudentLevel() {
+        return "Postgraduate Student";
     }
 }

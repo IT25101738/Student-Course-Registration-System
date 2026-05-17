@@ -20,75 +20,20 @@
             border-radius: 10px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 400px;
-            /* Added slight max-height and scroll in case the screen is small */
+            max-width: 450px;
             max-height: 90vh;
             overflow-y: auto;
         }
-        h2 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        label {
-            font-weight: bold;
-            color: #555;
-            font-size: 14px;
-            display: block;
-            margin-top: 15px;
-        }
-        /* Added 'select' here to style the dropdown exactly like the text boxes */
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0 0 0;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        input:focus, select:focus {
-            border-color: #28a745;
-            outline: none;
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 25px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
-        }
-        .login-link a {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-        #statusMessage {
-            text-align: center;
-            font-weight: bold;
-            margin-top: 15px;
-            font-size: 14px;
-        }
+        h2 { text-align: center; margin-top: 0; margin-bottom: 20px; color: #333; }
+        label { font-weight: bold; color: #555; font-size: 14px; display: block; margin-top: 15px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0 0 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        input:focus, select:focus { border-color: #28a745; outline: none; box-shadow: 0 0 5px rgba(40, 167, 69, 0.3); }
+        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 25px; transition: background-color 0.3s; }
+        button:hover { background-color: #218838; }
+        .login-link { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
+        .login-link a { color: #007bff; text-decoration: none; font-weight: bold; }
+        .login-link a:hover { text-decoration: underline; }
+        #statusMessage { text-align: center; font-weight: bold; margin-top: 15px; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -108,6 +53,14 @@
     <label>Email Address:</label>
     <input type="email" id="studentEmail" placeholder="Enter your email">
 
+    <label>Date of Birth:</label>
+    <input type="date" id="studentDob">
+
+    <label>Contact Number:</label>
+    <input type="text" id="studentContact" placeholder="Enter phone number">
+
+    <label>Home Address:</label>
+    <input type="text" id="studentAddress" placeholder="Enter your home address">
     <label>Major:</label>
     <select id="studentMajor">
         <option value="Software Engineering">Software Engineering</option>
@@ -133,7 +86,6 @@
 </div>
 
 <script>
-    // NEW: Function to change the text box label when dropdown changes
     function updateDynamicField() {
         const type = document.getElementById("studentType").value;
         const label = document.getElementById("dynamicLabel");
@@ -155,29 +107,36 @@
         const major = document.getElementById("studentMajor").value;
         const dynamicData = document.getElementById("dynamicInput").value;
         const password = document.getElementById("studentPassword").value;
+
+        // NEW: Grab the extra data
+        const dob = document.getElementById("studentDob").value;
+        const contact = document.getElementById("studentContact").value;
+        const address = document.getElementById("studentAddress").value;
+
         const statusMessage = document.getElementById("statusMessage");
 
-        // 1. Stop the user if they left ANY box blank
         if (!name || !email || !major || !password || !dynamicData) {
-            statusMessage.style.color = "#dc3545"; // Red error color
-            statusMessage.innerText = "Please fill in all fields.";
+            statusMessage.style.color = "#dc3545";
+            statusMessage.innerText = "Please fill in all required fields.";
             return;
         }
 
         statusMessage.innerText = "Registering...";
         statusMessage.style.color = "#555";
 
-        // 2. Package the data (Now includes type and extraInfo!)
+        // NEW: Add the extra fields to the payload
         const studentData = {
             type: type,
             name: name,
             email: email,
             major: major,
             extraInfo: dynamicData,
-            password: password
+            password: password,
+            birthday: dob,
+            contactNumber: contact,
+            address: address
         };
 
-        // 3. Send to Java Server
         fetch('http://localhost:8080/api/students/register', {
             method: 'POST',
             headers: {
@@ -187,7 +146,6 @@
         })
         .then(response => {
             if(response.ok) {
-                // Success! Instantly teleport the user to the login page
                 window.location.href = "login.html";
             } else {
                 statusMessage.style.color = "#dc3545";

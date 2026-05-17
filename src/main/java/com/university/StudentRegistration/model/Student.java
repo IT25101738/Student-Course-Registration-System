@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity // tells spring the class is a database table
 @Table(name = "students") // sets the table name student into students
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // handles inheritance in the database
+@DiscriminatorColumn(name = "student_type") // Helps the database separate them cleanly
 public class Student {
 
     @Id
@@ -15,6 +16,11 @@ public class Student {
     private String email;
     private String major;
     private String password;
+
+    //new fields
+    private String birthday;
+    private String contactNumber;
+    private String address;
 
     // Spring Boot needs an empty constructor behind the scenes
     public Student() {
@@ -67,7 +73,35 @@ public class Student {
         this.password = password;
     }
 
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getProfileDisplayFormat() {
         return "Student: " + this.name + " | Major: " + this.major;
+    }
+
+    public String getStudentLevel() {
+        return "General Student";
     }
 }

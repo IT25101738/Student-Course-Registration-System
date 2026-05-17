@@ -6,6 +6,7 @@ import com.university.StudentRegistration.model.GraduateStudent;
 import com.university.StudentRegistration.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 @RestController // tells spring this class handles web requests
 @RequestMapping("/api/students") // base URL (so all endpoints starts with /api/students)
@@ -26,6 +27,11 @@ public class StudentController {
         String password = requestData.get("password");
         String extraInfo = requestData.get("extraInfo");
 
+        //new info
+        String birthday = requestData.get("birthday");
+        String contactNumber = requestData.get("contactNumber");
+        String address = requestData.get("address");
+
         //declare a parent variable
         Student newStudent;
 
@@ -34,6 +40,10 @@ public class StudentController {
         } else {
             newStudent = new UndergraduateStudent(name, email, major, password, extraInfo);
         }
+        // adding new fields using
+        newStudent.setBirthday(birthday);
+        newStudent.setContactNumber(contactNumber);
+        newStudent.setAddress(address);
 
         //save it to the database.
         return studentRepository.save(newStudent);
@@ -66,6 +76,14 @@ public class StudentController {
             existingStudent.setName(updatedData.getName());
             existingStudent.setMajor(updatedData.getMajor());
 
+            // --- NEW: Save Contact and Address if they are provided ---
+            if (updatedData.getContactNumber() != null && !updatedData.getContactNumber().isEmpty()) {
+                existingStudent.setContactNumber(updatedData.getContactNumber());
+            }
+            if (updatedData.getAddress() != null && !updatedData.getAddress().isEmpty()) {
+                existingStudent.setAddress(updatedData.getAddress());
+            }
+
             //Save the modified object back into MySQL
             return studentRepository.save(existingStudent);
         } else {
@@ -89,6 +107,20 @@ public class StudentController {
         } else {
             // Exception Handling
             throw new RuntimeException("Security Error: Invalid email or password.");
+        }
+    }
+
+    // Fetch the complete student profile for the Profile Card
+    @GetMapping("/profile/{email}")
+    public ResponseEntity<Student> getStudentProfile(@PathVariable String email) {
+
+        // Ask the database to find the student by their email
+        Student student = studentRepository.findByEmail(email);
+
+        if (student != null) {
+            return ResponseEntity.ok(student); // Sends the data with a 200 OK status
+        } else {
+            return ResponseEntity.notFound().build(); // Sends a 404 Not Found status
         }
     }
 }
