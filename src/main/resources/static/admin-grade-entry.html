@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Grade Entry Portal</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; margin: 0; background-color: #f4f7f6; }
+        .sidebar { width: 250px; height: 100vh; background-color: #2c3e50; color: white; padding: 20px; position: fixed; }
+        .sidebar-header { font-size: 24px; font-weight: bold; margin-bottom: 30px; border-bottom: 1px solid #34495e; padding-bottom: 10px; }
+        .sidebar-menu { list-style: none; padding: 0; }
+        .sidebar-menu li { padding: 12px; margin-bottom: 5px; cursor: pointer; transition: 0.3s; border-radius: 4px; }
+        .sidebar-menu li:hover { background-color: #34495e; }
+        .sidebar-menu li.active { background-color: #3498db; }
+
+        .main-content { margin-left: 290px; padding: 40px; width: 100%; box-sizing: border-box; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; color: #333; }
+
+        .btn { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-primary { background-color: #3498db; color: white; }
+        .btn-success { background-color: #2ecc71; color: white; }
+        .btn:hover { opacity: 0.8; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">UniPortal Admin</div>
+    <ul class="sidebar-menu">
+        <li onclick="window.location.href='dashboard.html'">Dashboard</li>
+        <li onclick="window.location.href='admin-manage-courses.html'">Manage Catalog</li>
+        <li class="active" onclick="window.location.href='admin-grade-entry.html'">Grade Entry</li>
+        <li onclick="window.location.href='admin-grade-modify.html'">Modify Grades</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <h1>Grade Entry Portal</h1>
+    <p>Search for student registrations and release grades.</p>
+
+    <div class="card">
+        <div class="form-group">
+            <label>Student Email:</label>
+            <input type="text" id="searchEmail" placeholder="Enter student email to search registrations...">
+        </div>
+        <button class="btn btn-primary" onclick="searchRegistrations()">Search Courses</button>
+    </div>
+
+    <div class="card" id="coursesCard" style="display: none;">
+        <h3>Enrolled Courses for <span id="studentDisplay"></span></h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Course Code</th>
+                <th>Exam Topic / Report Card Name</th>
+                <th>Numeric Mark (0-100)</th>
+                <th>Grade Type</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="coursesTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function searchRegistrations() {
+        const email = document.getElementById('searchEmail').value;
+        if (!email) return alert('Enter an email');
+        fetch('/api/registrations/my-schedule/' + encodeURIComponent(email))
+            .then(res => res.json())
+            .then(studentCourses => {
+                const tbody = document.getElementById('coursesTableBody');
+                tbody.innerHTML = '';
+                if (!Array.isArray(studentCourses) || studentCourses.length === 0) {
+                    alert('No courses found for this student.');
+                    document.getElementById('coursesCard').style.display = 'none';
+                    return;
+                }
+                document.getElementById('studentDisplay').innerText = email;
+                studentCourses.forEach(reg => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>${reg.courseCode}</strong></td>
+                        <td><input type="text" id="topic_${reg.id}" placeholder="e.g. Final Exam" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"></td>
+                        <td><input type="number" id="mark_${reg.id}" min="0" max="100" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"></td>
+                        <td>
+                            <select id="type_${reg.id}" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                                <option value="letter">Letter</option>
+                                <option value="passfail">Pass/Fail</option>
+                            </select>
+                        </td>
+                        <td><button class="btn btn-success" onclick="releaseGrade('${email}', '${reg.courseCode}', ${reg.id})">Release Grade</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                document.getElementById('coursesCard').style.display = 'block';
+            });
+    }
+
+    function releaseGrade(email, courseCode, regId) {
+        const topic = document.getElementById('topic_' + regId).value;
+        const mark = document.getElementById('mark_' + regId).value;
+        const type = document.getElementById('type_' + regId).value;
+
+        if (!topic || mark === '') return alert('Please enter topic and mark');
+
+        fetch('/api/grades/release', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                studentEmail: email,
+                courseCode: courseCode,
+                examTopic: topic,
+                numericMark: parseFloat(mark),
+                gradeType: type
+            })
+        }).then(res => {
+            if (res.ok) alert('Grade released successfully!');
+            else alert('Failed to release grade');
+        });
+    }
+</script>
+
+</body>
+</html>

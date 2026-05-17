@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Transcript - UniPortal</title>
+    <style>
+        /* General Reset and Font */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex; /* This puts the sidebar and main content side-by-side */
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        /* --- SIDEBAR STYLING --- */
+        .sidebar {
+            width: 250px;
+            background-color: #212529; /* Dark gray/black */
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 1px solid #343a40;
+        }
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1; /* Pushes the logout button to the bottom */
+        }
+        .sidebar-menu li {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            color: #adb5bd;
+        }
+        .sidebar-menu li:hover {
+            background-color: #343a40;
+            color: white;
+        }
+        .sidebar-menu li.active {
+            background-color: #343a40; /* Highlight the current page */
+            color: white;
+            border-left: 4px solid #007bff; /* Blue accent line */
+        }
+        .logout-btn {
+            padding: 15px 20px;
+            color: #dc3545; /* Red text for logout */
+            cursor: pointer;
+            border-top: 1px solid #343a40;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover {
+            background-color: #343a40;
+        }
+
+        /* --- MAIN CONTENT STYLING --- */
+        .main-content {
+            flex-grow: 1; /* Takes up the rest of the screen */
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+
+        /* Top Header Row */
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .header-row h1 {
+            margin: 0;
+            color: #333;
+        }
+        .badge {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Table Styling */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef; }
+        th { background-color: #f8f9fa; color: #495057; }
+
+        .gpa-banner { text-align: center; }
+        .gpa-banner h3 { margin-top: 0; margin-bottom: 10px; font-weight: normal; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        UniPortal
+    </div>
+    <ul class="sidebar-menu">
+        <li onclick="window.location.href='dashboard.html'">Dashboard</li>
+        <li onclick="window.location.href='course-catalog.html'">Course Catalog</li>
+        <li onclick="window.location.href='enroll-courses.html'">Enroll Courses</li>
+        <li onclick="window.location.href='my-schedule.html'">My Schedule</li>
+        <li onclick="window.location.href='drop-course.html'">Drop Courses</li>
+        <li class="active" onclick="window.location.href='student-transcript.html'">My Transcript</li>
+        <li onclick="window.location.href='profile.html'">Update Profile</li>
+        <li onclick="window.location.href='faculty-directory.html'">Faculty Directory</li>
+        <li onclick="window.location.href='faculty-assign.html'">Course Assignment</li>
+        <li onclick="window.location.href='grade-entry.html'">Enter Grades (Faculty)</li>
+        <li onclick="window.location.href='grade-modification.html'">Modify Grades (Admin)</li>
+    </ul>
+    <div class="logout-btn" onclick="logout()">
+        Logout
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="header-row">
+        <h1>My Transcript</h1>
+        <div class="badge">Spring 2026 / Transcript</div>
+    </div>
+
+    <div class="gpa-banner card" style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none;">
+        <h3>Overall Cumulative GPA</h3>
+        <h1 id="gpaDisplay" style="margin: 0; font-size: 3rem;">--</h1>
+    </div>
+
+    <div class="card">
+        <h2>My Report Cards</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Course Code</th>
+                <th>Exam Topic</th>
+                <th>Numeric Mark</th>
+                <th>Grade Achieved</th>
+                <th>GPA Points</th>
+            </tr>
+            </thead>
+            <tbody id="transcriptBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const email = sessionStorage.getItem("loggedInStudentEmail");
+    if(!email) {
+        alert('Please login first');
+        window.location.href = 'index.html'; // Adjust as needed based on your auth structure
+    } else {
+        fetch('/api/grades/transcript/' + encodeURIComponent(email))
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('transcriptBody');
+                let totalPoints = 0;
+                let validCourses = 0;
+
+                data.forEach(grade => {
+                    const tr = document.createElement('tr');
+
+                    let gpaDisplay = grade.gpaPoints;
+                    if(grade.gradeType === 'passfail') {
+                        gpaDisplay = 'N/A'; // Doesn't affect GPA
+                    } else {
+                        totalPoints += grade.gpaPoints;
+                        validCourses++;
+                    }
+
+                    tr.innerHTML = `
+                        <td><strong>${grade.courseCode}</strong></td>
+                        <td>${grade.examTopic}</td>
+                        <td>${grade.numericMark}</td>
+                        <td><strong>${grade.gradeString}</strong></td>
+                        <td>${gpaDisplay}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                const overallGpa = validCourses > 0 ? (totalPoints / validCourses).toFixed(2) : 'N/A';
+                document.getElementById('gpaDisplay').innerText = overallGpa;
+            });
+    }
+
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>
