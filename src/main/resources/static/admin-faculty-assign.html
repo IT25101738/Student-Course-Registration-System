@@ -14,38 +14,41 @@
             background-color: #f8f9fa;
         }
 
-        /* --- SIDEBAR (matches existing pages) --- */
+        /* --- MASTER ADMIN SIDEBAR STYLING --- */
         .sidebar {
             width: 250px;
-            background-color: #212529;
+            height: 100vh;
+            background-color: #2c3e50;
             color: white;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
+            padding: 20px;
+            position: fixed;
         }
         .sidebar-header {
-            padding: 20px;
             font-size: 24px;
             font-weight: bold;
-            border-bottom: 1px solid #343a40;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #34495e;
+            padding-bottom: 10px;
         }
         .sidebar-menu {
             list-style: none;
             padding: 0;
             margin: 0;
-            flex-grow: 1;
         }
         .sidebar-menu li {
-            padding: 15px 20px;
+            padding: 12px;
+            margin-bottom: 5px;
             cursor: pointer;
-            transition: background 0.3s;
-            color: #adb5bd;
-        }
-        .sidebar-menu li:hover { background-color: #343a40; color: white; }
-        .sidebar-menu li.active {
-            background-color: #343a40;
+            transition: 0.3s;
+            border-radius: 4px;
             color: white;
-            border-left: 4px solid #007bff;
+        }
+        .sidebar-menu li:hover {
+            background-color: #34495e;
+        }
+        .sidebar-menu li.active {
+            background-color: #3498db;
+            color: white;
         }
         .logout-btn {
             padding: 15px 20px;
@@ -58,9 +61,10 @@
 
         /* --- MAIN CONTENT --- */
         .main-content {
-            flex-grow: 1;
+            margin-left: 290px;
             padding: 40px;
-            overflow-y: auto;
+            width: 100%;
+            box-sizing: border-box;
         }
         .page-title {
             font-size: 26px;
@@ -279,14 +283,16 @@
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-    <div class="sidebar-header">UniPortal</div>
+    <div class="sidebar-header">UniPortal Admin</div>
     <ul class="sidebar-menu">
         <li onclick="window.location.href='dashboard.html'">Dashboard</li>
-        <li onclick="window.location.href='faculty-register.html'">Register Faculty</li>
-        <li onclick="window.location.href='faculty-directory.html'">Faculty Directory</li>
-        <li class="active">Course Assignment</li>
+        <li onclick="window.location.href='admin-add-course.html'">Add New Course</li>
+        <li onclick="window.location.href='admin-manage-courses.html'">Manage Catalog</li>
+        <li onclick="window.location.href='admin-faculty-register.html'">Register Faculty</li>
+        <li onclick="window.location.href='admin_faculty_directory.html'">Faculty Directory</li>
+        <li class="active" onclick="window.location.href='admin-faculty-assign.html'">Course Assignment</li>
+        <li onclick="window.location.href='course-catalog.html'">Student View</li>
     </ul>
-    <div class="logout-btn" onclick="logout()">Logout</div>
 </div>
 
 <!-- MAIN CONTENT -->
