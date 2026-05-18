@@ -339,16 +339,29 @@
             </div>
         </div>
 
-        <!-- Teaching load info (Polymorphism demonstration) -->
+        <!-- NEW TIME SLOT INPUT -->
+        <div style="margin-bottom: 20px;">
+            <label for="time-slot-input" style="font-size: 12px; color: #6c757d; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; display: block; font-weight: bold;">Class Schedule (Time Slot)</label>
+            <input type="text" id="time-slot-input" placeholder="e.g. Mon 9:00-11:00" style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 14px;">
+        </div>
+
+        <!-- Teaching load info -->
         <div class="load-info" id="load-info">
-            ⚡ <strong id="load-number"></strong> course(s) max — Teaching load limit for this instructor
-            (Polymorphism: <code>getMaxTeachingLoad()</code> returns different values for Full-Time vs Adjunct)
+            ⚠️ This instructor can be assigned a maximum of <strong id="load-number"></strong> course(s).
+            Assigning beyond this limit will be rejected.
         </div>
 
         <button class="assign-btn" id="assign-btn" onclick="assignCourse()" disabled>
             Assign Course →
         </button>
         <div class="result-alert" id="result-alert"></div>
+
+        <!-- Assigned Courses Panel -->
+        <hr class="divider">
+        <h3 style="font-size:15px;color:#212529;margin-top:0;">Currently Assigned Courses</h3>
+        <div id="current-assignments-list" style="margin-bottom: 20px; font-size: 14px; color: #495057;">
+            Select a faculty member to view their current assignments.
+        </div>
 
         <!-- Update Office Hours Section -->
         <hr class="divider">
@@ -435,9 +448,48 @@
         document.getElementById('sel-faculty-display').textContent = name + ' (' + empId + ')';
         document.getElementById('sel-faculty-display').classList.remove('placeholder');
 
-        // Show teaching load info (POLYMORPHISM displayed here)
-        document.getElementById('load-number').textContent = maxLoad;
-        document.getElementById('load-info').classList.add('visible');
+        // Fetch current assignments for this instructor
+        fetch('/api/faculty/search?employeeId=' + empId)
+            .then(res => res.json())
+            .then(data => {
+                const assignmentsDiv = document.getElementById('current-assignments-list');
+                const assignmentsStr = data.assignedCourseCode;
+                let currentLoad = 0;
+                
+                if (!assignmentsStr) {
+                    assignmentsDiv.innerHTML = '<span style="color:#adb5bd;">No courses assigned yet.</span>';
+                } else {
+                    const courses = assignmentsStr.split(';');
+                    currentLoad = courses.length;
+                    let html = '<ul style="padding-left: 20px; margin: 0;">';
+                    courses.forEach(c => {
+                        const parts = c.split(':');
+                        if (parts.length === 2) {
+                            html += `<li style="margin-bottom: 4px;"><strong>${parts[0]}</strong> — ${parts[1]}</li>`;
+                        }
+                    });
+                    html += '</ul>';
+                    assignmentsDiv.innerHTML = html;
+                }
+                
+                // Show teaching load info (POLYMORPHISM displayed here)
+                const loadInfo = document.getElementById('load-info');
+                document.getElementById('load-number').textContent = maxLoad;
+                
+                if (currentLoad >= maxLoad) {
+                    loadInfo.innerHTML = `⚠️ This instructor has reached their maximum load of <strong>${maxLoad}</strong> course(s).`;
+                    loadInfo.style.backgroundColor = '#fff3cd';
+                    loadInfo.style.borderColor = '#ffeeba';
+                    loadInfo.style.color = '#856404';
+                } else {
+                    loadInfo.innerHTML = `⚠️ This instructor can be assigned a maximum of <strong>${maxLoad}</strong> course(s). Currently assigned: ${currentLoad}`;
+                    loadInfo.style.backgroundColor = '#f0f7ff';
+                    loadInfo.style.borderColor = '#bee5fd';
+                    loadInfo.style.color = '#004085';
+                }
+                loadInfo.classList.add('visible');
+            })
+            .catch(e => console.error(e));
 
         tryEnableAssign();
     }
@@ -464,20 +516,29 @@
 
     // PUT /api/faculty/assign-course
     async function assignCourse() {
+        const timeSlot = document.getElementById('time-slot-input').value.trim();
+        if (!timeSlot) {
+            showResult('result-alert', 'Please enter a time slot for the course.', 'error');
+            return;
+        }
+
         try {
             const response = await fetch('/api/faculty/assign-course', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     employeeId: selectedFacultyId,
-                    courseCode: selectedCourseCode
+                    courseCode: selectedCourseCode,
+                    timeSlot: timeSlot
                 })
             });
             const message = await response.text();
             showResult('result-alert', message, response.ok ? 'success' : 'error');
             if (response.ok) {
                 // Refresh the lists to reflect changes
+                document.getElementById('time-slot-input').value = '';
                 init();
+                selectFaculty(selectedFacultyId, selectedFacultyName, selectedFacultyLoad);
             }
         } catch (err) {
             showResult('result-alert', 'Connection error: ' + err.message, 'error');

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,6 +23,7 @@
             padding: 20px;
             position: fixed;
         }
+
         .sidebar-header {
             font-size: 24px;
             font-weight: bold;
@@ -29,11 +31,13 @@
             border-bottom: 1px solid #34495e;
             padding-bottom: 10px;
         }
+
         .sidebar-menu {
             list-style: none;
             padding: 0;
             margin: 0;
         }
+
         .sidebar-menu li {
             padding: 12px;
             margin-bottom: 5px;
@@ -42,13 +46,16 @@
             border-radius: 4px;
             color: white;
         }
+
         .sidebar-menu li:hover {
             background-color: #34495e;
         }
+
         .sidebar-menu li.active {
             background-color: #3498db;
             color: white;
         }
+
         .logout-btn {
             padding: 15px 20px;
             color: #dc3545;
@@ -56,7 +63,10 @@
             border-top: 1px solid #343a40;
             transition: background 0.3s;
         }
-        .logout-btn:hover { background-color: #343a40; }
+
+        .logout-btn:hover {
+            background-color: #343a40;
+        }
 
         /* --- MAIN CONTENT --- */
         .main-content {
@@ -65,12 +75,14 @@
             width: 100%;
             box-sizing: border-box;
         }
+
         .page-title {
             font-size: 26px;
             font-weight: bold;
             color: #212529;
             margin-bottom: 8px;
         }
+
         .page-subtitle {
             color: #6c757d;
             margin-bottom: 24px;
@@ -84,6 +96,7 @@
             margin-bottom: 20px;
             align-items: center;
         }
+
         .toolbar input {
             flex: 1;
             padding: 10px 14px;
@@ -92,11 +105,13 @@
             font-size: 14px;
             max-width: 320px;
         }
+
         .toolbar input:focus {
             outline: none;
             border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
+
         .btn {
             padding: 10px 18px;
             border: none;
@@ -106,45 +121,81 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        .btn-primary { background-color: #007bff; color: white; }
-        .btn-primary:hover { background-color: #0056b3; }
-        .btn-success { background-color: #28a745; color: white; }
-        .btn-success:hover { background-color: #1e7e34; }
-        .btn-danger { background-color: #dc3545; color: white; }
-        .btn-danger:hover { background-color: #bd2130; }
-        .btn-sm { padding: 6px 12px; font-size: 13px; }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #1e7e34;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #bd2130;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
 
         /* --- TABLE --- */
         .table-card {
             background: white;
-            padding: 20px; /* Pads the outer container card frame edges cleanly */
+            padding: 20px;
+            /* Pads the outer container card frame edges cleanly */
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
         thead th {
-            background-color: #f8f9fa; /* Light background layout */
-            color: #333;               /* Dark readable text */
+            background-color: #f8f9fa;
+            /* Light background layout */
+            color: #333;
+            /* Dark readable text */
             padding: 12px;
             text-align: left;
             font-weight: bold;
             font-size: 15px;
             border-bottom: 2px solid #eee;
         }
+
         tbody tr {
             border-bottom: 1px solid #f1f3f5;
             transition: background 0.15s;
         }
-        tbody tr:hover { background-color: #f8f9fa; }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
         tbody td {
             padding: 12px;
             font-size: 15px;
             color: #333;
             border-bottom: 1px solid #eee;
         }
+
         .badge-fulltime {
             background-color: #d4edda;
             color: #155724;
@@ -153,6 +204,7 @@
             font-size: 12px;
             font-weight: 600;
         }
+
         .badge-adjunct {
             background-color: #fff3cd;
             color: #856404;
@@ -161,47 +213,77 @@
             font-size: 12px;
             font-weight: 600;
         }
-        .actions { display: flex; gap: 8px; }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
 
         /* --- MODAL (Profile view) --- */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
             z-index: 100;
             align-items: center;
             justify-content: center;
         }
-        .modal-overlay.visible { display: flex; }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
         .modal {
             background: white;
             border-radius: 12px;
             padding: 30px;
             max-width: 480px;
             width: 90%;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         }
-        .modal h3 { margin-top: 0; color: #212529; }
+
+        .modal h3 {
+            margin-top: 0;
+            color: #212529;
+        }
+
         .modal-field {
             margin-bottom: 12px;
             font-size: 14px;
         }
-        .modal-field span { color: #6c757d; font-weight: 500; }
-        .modal-field strong { color: #212529; }
+
+        .modal-field span {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .modal-field strong {
+            color: #212529;
+        }
+
         .teaching-load-bar {
             background: #e9ecef;
             border-radius: 8px;
             height: 10px;
             margin-top: 6px;
         }
+
         .teaching-load-fill {
             height: 100%;
             border-radius: 8px;
             background: linear-gradient(90deg, #007bff, #00c6ff);
         }
-        .modal-actions { margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px; }
+
+        .modal-actions {
+            margin-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
 
         /* Empty state */
         .empty-state {
@@ -209,171 +291,205 @@
             padding: 60px 20px;
             color: #adb5bd;
         }
-        .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
     </style>
 </head>
+
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <div class="sidebar-header">UniPortal Admin</div>
-    <ul class="sidebar-menu">
-        <li onclick="window.location.href='admin.html'">Dashboard</li>
-        <li onclick="window.location.href='admin-add-course.html'">Add New Course</li>
-        <li onclick="window.location.href='admin-manage-courses.html'">Manage Catalog</li>
-        <li onclick="window.location.href='admin-faculty-register.html'">Register Faculty</li>
-        <li class="active">Faculty Directory</li>
-        <li onclick="window.location.href='admin-faculty-assign.html'">Course Assignment</li>
-        <li onclick="window.location.href='admin-grade-entry.html'">Grade Entry</li>
-        <li onclick="window.location.href='grade-modify.html'">Grade Modify</li>
-        <li onclick="window.location.href='dashboard.html'">Student Portal</li>
-    </ul>
-</div>
-
-<!-- MAIN CONTENT -->
-<div class="main-content">
-    <h1 style="font-size: 28px; color: #2c3e50; margin-top: 0; margin-bottom: 8px; font-weight: bold;">Faculty Directory</h1>
-    <p style="color: #7f8c8d; margin-bottom: 24px; margin-top: 0; font-size: 15px;">Search and view all registered faculty members.</p>
-
-    <div class="toolbar">
-        <input type="text" id="search-input" placeholder="Search by name or department..." oninput="filterTable()">
-        <button class="btn btn-success" onclick="window.location.href='admin-faculty-register.html'">+ Add Faculty</button>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">UniPortal Admin</div>
+        <ul class="sidebar-menu">
+            <li onclick="window.location.href='admin.html'">Dashboard</li>
+            <li onclick="window.location.href='admin-add-course.html'">Add New Course</li>
+            <li onclick="window.location.href='admin-manage-courses.html'">Manage Catalog</li>
+            <li onclick="window.location.href='admin-faculty-register.html'">Register Faculty</li>
+            <li class="active">Faculty Directory</li>
+            <li onclick="window.location.href='admin-faculty-assign.html'">Course Assignment</li>
+            <li onclick="window.location.href='admin-grade-entry.html'">Grade Entry</li>
+            <li onclick="window.location.href='grade-modify.html'">Grade Modify</li>
+            <li onclick="window.location.href='dashboard.html'">Student Portal</li>
+        </ul>
     </div>
 
-    <div class="table-card">
-        <table>
-            <thead>
-            <tr>
-                <th>Employee ID</th>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Type</th>
-                <th>Max Load</th>
-                <th>Assigned Course</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody id="faculty-table-body">
-            <!-- Populated by JavaScript -->
-            </tbody>
-        </table>
-        <div class="empty-state" id="empty-state" style="display:none;">
-            <div class="icon">👨‍🏫</div>
-            <div>No faculty members found.</div>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <h1 style="font-size: 28px; color: #2c3e50; margin-top: 0; margin-bottom: 8px; font-weight: bold;">Faculty
+            Directory</h1>
+        <p style="color: #7f8c8d; margin-bottom: 24px; margin-top: 0; font-size: 15px;">Search and view all registered
+            faculty members.</p>
+
+        <div class="toolbar">
+            <input type="text" id="search-input" placeholder="Search by name or department..." oninput="filterTable()">
+            <button class="btn btn-success" onclick="window.location.href='admin-faculty-register.html'">+ Add
+                Faculty</button>
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Type</th>
+                        <th>Max Load</th>
+                        <th>Assigned Courses</th>
+                        <th>Schedule / Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="faculty-table-body">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+            <div class="empty-state" id="empty-state" style="display:none;">
+                <div class="icon">👨‍🏫</div>
+                <div>No faculty members found.</div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Profile Modal -->
-<div class="modal-overlay" id="modal-overlay">
-    <div class="modal">
-        <h3>Faculty Profile</h3>
-        <div class="modal-field"><span>Profile: </span><strong id="modal-profile"></strong></div>
-        <div class="modal-field"><span>Employee ID: </span><strong id="modal-empid"></strong></div>
-        <div class="modal-field"><span>Email: </span><strong id="modal-email"></strong></div>
-        <div class="modal-field"><span>Max Teaching Load: </span><strong id="modal-load"></strong> courses</div>
-        <div class="teaching-load-bar">
-            <div class="teaching-load-fill" id="modal-load-bar"></div>
-        </div>
-        <div class="modal-field" style="margin-top:12px;"><span>Assigned Course: </span><strong id="modal-course"></strong></div>
-        <div class="modal-actions">
-            <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeModal()">Close</button>
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <h3>Faculty Profile</h3>
+            <div class="modal-field"><span>Profile: </span><strong id="modal-profile"></strong></div>
+            <div class="modal-field"><span>Employee ID: </span><strong id="modal-empid"></strong></div>
+            <div class="modal-field"><span>Email: </span><strong id="modal-email"></strong></div>
+            <div class="modal-field"><span>Max Teaching Load: </span><strong id="modal-load"></strong> courses</div>
+            <div class="teaching-load-bar">
+                <div class="teaching-load-fill" id="modal-load-bar"></div>
+            </div>
+            <div class="modal-field" style="margin-top:12px;"><span>Assigned Course: </span><strong
+                    id="modal-course"></strong></div>
+            <div class="modal-actions">
+                <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeModal()">Close</button>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Delete Confirmation Modal -->
-<div class="modal-overlay" id="delete-modal-overlay">
-    <div class="modal">
-        <h3 style="color:#dc3545;">⚠️ Remove Faculty Member</h3>
-        <p style="color:#495057;font-size:14px;">Are you sure you want to permanently remove this faculty member? This action cannot be undone.</p>
-        <input type="hidden" id="delete-empid">
-        <p id="delete-name-display" style="font-weight:600;font-size:15px;color:#212529;"></p>
-        <div class="modal-actions">
-            <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeDeleteModal()">Cancel</button>
-            <button class="btn btn-danger" onclick="confirmDelete()">Remove Faculty</button>
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="delete-modal-overlay">
+        <div class="modal">
+            <h3 style="color:#dc3545;">⚠️ Remove Faculty Member</h3>
+            <p style="color:#495057;font-size:14px;">Are you sure you want to permanently remove this faculty member?
+                This action cannot be undone.</p>
+            <input type="hidden" id="delete-empid">
+            <p id="delete-name-display" style="font-weight:600;font-size:15px;color:#212529;"></p>
+            <div class="modal-actions">
+                <button class="btn" style="background:#e9ecef;color:#212529;"
+                    onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">Remove Faculty</button>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Edit Faculty Modal -->
-<div class="modal-overlay" id="edit-modal-overlay">
-    <div class="modal" style="max-width:520px;">
-        <h3 style="color:#212529;">✏️ Edit Faculty Member</h3>
-        <input type="hidden" id="edit-empid">
-        <div class="modal-field">
-            <label style="font-size:13px;font-weight:500;color:#6c757d;">Employee ID (read-only)</label>
-            <p id="edit-empid-display" style="font-size:15px;font-weight:600;color:#212529;margin:4px 0 0;"></p>
-        </div>
-        <div class="modal-field">
-            <label style="font-size:13px;font-weight:500;color:#495057;">Name</label>
-            <input type="text" id="edit-name"
-                   style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
-        </div>
-        <div class="modal-field">
-            <label style="font-size:13px;font-weight:500;color:#495057;">Department</label>
-            <input type="text" id="edit-department"
-                   style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
-        </div>
-        <div class="modal-field">
-            <label style="font-size:13px;font-weight:500;color:#495057;">Email</label>
-            <input type="email" id="edit-email"
-                   style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
-        </div>
-        <div class="modal-field">
-            <label style="font-size:13px;font-weight:500;color:#495057;" id="edit-extra-label">Office Hours / Contract End Date</label>
-            <input type="text" id="edit-extra"
-                   style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
-        </div>
-        <div class="modal-actions">
-            <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeEditModal()">Cancel</button>
-            <button class="btn btn-success" onclick="confirmEdit()">Save Changes</button>
+    <!-- Edit Faculty Modal -->
+    <div class="modal-overlay" id="edit-modal-overlay">
+        <div class="modal" style="max-width:520px;">
+            <h3 style="color:#212529;">✏️ Edit Faculty Member</h3>
+            <input type="hidden" id="edit-empid">
+            <div class="modal-field">
+                <label style="font-size:13px;font-weight:500;color:#6c757d;">Employee ID (read-only)</label>
+                <p id="edit-empid-display" style="font-size:15px;font-weight:600;color:#212529;margin:4px 0 0;"></p>
+            </div>
+            <div class="modal-field">
+                <label style="font-size:13px;font-weight:500;color:#495057;">Name</label>
+                <input type="text" id="edit-name"
+                    style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
+            </div>
+            <div class="modal-field">
+                <label style="font-size:13px;font-weight:500;color:#495057;">Department</label>
+                <input type="text" id="edit-department"
+                    style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
+            </div>
+            <div class="modal-field">
+                <label style="font-size:13px;font-weight:500;color:#495057;">Email</label>
+                <input type="email" id="edit-email"
+                    style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
+            </div>
+            <div class="modal-field">
+                <label style="font-size:13px;font-weight:500;color:#495057;" id="edit-extra-label">Office Hours /
+                    Contract End Date</label>
+                <input type="text" id="edit-extra"
+                    style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:6px;margin-top:5px;box-sizing:border-box;font-size:14px;">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeEditModal()">Cancel</button>
+                <button class="btn btn-success" onclick="confirmEdit()">Save Changes</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    let allFaculty = [];
+    <script>
+        let allFaculty = [];
 
-    // On page load: fetch all faculty from the API
-    async function loadFaculty() {
-        try {
-            const response = await fetch('/api/faculty/all');
-            allFaculty = await response.json();
-            renderTable(allFaculty);
-        } catch (err) {
-            console.error('Failed to load faculty:', err);
+        // On page load: fetch all faculty from the API
+        async function loadFaculty() {
+            try {
+                const response = await fetch('/api/faculty/all');
+                allFaculty = await response.json();
+                renderTable(allFaculty);
+            } catch (err) {
+                console.error('Failed to load faculty:', err);
+            }
         }
-    }
 
-    // Render the faculty data into the HTML table
-    function renderTable(data) {
-        const tbody = document.getElementById('faculty-table-body');
-        const emptyState = document.getElementById('empty-state');
+        // Render the faculty data into the HTML table
+        function renderTable(data) {
+            const tbody = document.getElementById('faculty-table-body');
+            const emptyState = document.getElementById('empty-state');
 
-        if (data.length === 0) {
-            tbody.innerHTML = '';
-            emptyState.style.display = 'block';
-            return;
-        }
-        emptyState.style.display = 'none';
+            if (data.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            emptyState.style.display = 'none';
 
-        tbody.innerHTML = data.map(f => {
-            // Determine the badge based on the faculty_type discriminator
-            const isFullTime = f.officeHours !== undefined || (f.maxTeachingLoad === 4);
-            const typeLabel = f.contractEndDate !== undefined
-                ? '<span class="badge-adjunct">Adjunct</span>'
-                : '<span class="badge-fulltime">Full-Time</span>';
-            const maxLoad = f.maxTeachingLoad || '?';
-            const course = f.assignedCourseCode || '<span style="color:#adb5bd">—</span>';
+            tbody.innerHTML = data.map(f => {
+                // Determine the badge based on the faculty_type discriminator
+                const isFullTime = f.officeHours !== undefined || (f.maxTeachingLoad === 4);
+                const typeLabel = f.contractEndDate !== undefined
+                    ? '<span class="badge-adjunct">Adjunct</span>'
+                    : '<span class="badge-fulltime">Full-Time</span>';
+                const maxLoad = f.maxTeachingLoad || '?';
+                
+                let coursesHtml = '<span style="color:#adb5bd">—</span>';
+                let timeHtml = '<span style="color:#adb5bd">—</span>';
+                
+                if (f.assignedCourseCode) {
+                    const assignments = f.assignedCourseCode.split(';');
+                    const courseList = [];
+                    const timeList = [];
+                    assignments.forEach(a => {
+                        const parts = a.split(':');
+                        if (parts.length === 2) {
+                            courseList.push(`<span style="display:block; margin-bottom:4px;"><strong>${parts[0]}</strong></span>`);
+                            timeList.push(`<span style="display:block; margin-bottom:4px; font-size: 13px;">${parts[1]}</span>`);
+                        }
+                    });
+                    
+                    if (courseList.length > 0) {
+                        coursesHtml = courseList.join('');
+                        timeHtml = timeList.join('');
+                    }
+                }
 
-            return `<tr data-empid="${f.employeeId}" data-name="${f.name.toLowerCase()}" data-dept="${f.department.toLowerCase()}">
+                return `<tr data-empid="${f.employeeId}" data-name="${f.name.toLowerCase()}" data-dept="${f.department.toLowerCase()}">
                 <td>${f.employeeId}</td>
                 <td>${f.name}</td>
                 <td>${f.department}</td>
                 <td>${typeLabel}</td>
                 <td>${maxLoad}</td>
-                <td>${course}</td>
+                <td>${coursesHtml}</td>
+                <td>${timeHtml}</td>
                 <td>
                     <div class="actions">
                         <button class="btn btn-primary btn-sm" onclick='viewProfile(${JSON.stringify(f)})'>View</button>
@@ -382,139 +498,151 @@
                     </div>
                 </td>
             </tr>`;
-        }).join('');
-    }
+            }).join('');
+        }
 
-    // Client-side search filter
-    function filterTable() {
-        const query = document.getElementById('search-input').value.toLowerCase();
-        const filtered = allFaculty.filter(f =>
-            f.name.toLowerCase().includes(query) ||
-            f.department.toLowerCase().includes(query) ||
-            f.employeeId.toLowerCase().includes(query)
-        );
-        renderTable(filtered);
-    }
+        // Client-side search filter
+        function filterTable() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = allFaculty.filter(f =>
+                f.name.toLowerCase().includes(query) ||
+                f.department.toLowerCase().includes(query) ||
+                f.employeeId.toLowerCase().includes(query)
+            );
+            renderTable(filtered);
+        }
 
-    // Open the profile modal and populate it
-    function viewProfile(faculty) {
-        document.getElementById('modal-profile').textContent = faculty.profileDisplayFormat || faculty.name;
-        document.getElementById('modal-empid').textContent = faculty.employeeId;
-        document.getElementById('modal-email').textContent = faculty.email;
-        document.getElementById('modal-load').textContent = faculty.maxTeachingLoad;
-        document.getElementById('modal-course').textContent = faculty.assignedCourseCode || 'Not assigned yet';
-
-        // Visualise the teaching load capacity bar (max 4 slots)
-        const pct = (faculty.maxTeachingLoad / 4) * 100;
-        document.getElementById('modal-load-bar').style.width = pct + '%';
-
-        document.getElementById('modal-overlay').classList.add('visible');
-    }
-    function closeModal() {
-        document.getElementById('modal-overlay').classList.remove('visible');
-    }
-
-    // Delete modal
-    function openDeleteModal(empId) {
-        const faculty = allFaculty.find(f => f.employeeId === empId);
-        document.getElementById('delete-empid').value = empId;
-        document.getElementById('delete-name-display').textContent =
-            faculty ? faculty.name + ' (' + empId + ')' : empId;
-        document.getElementById('delete-modal-overlay').classList.add('visible');
-    }
-    function closeDeleteModal() {
-        document.getElementById('delete-modal-overlay').classList.remove('visible');
-    }
-    async function confirmDelete() {
-        const employeeId = document.getElementById('delete-empid').value;
-
-        try {
-            const response = await fetch('/api/faculty/delete', {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ employeeId })
-            });
-            const message = await response.text();
-            if (response.ok) {
-                closeDeleteModal();
-                loadFaculty(); // refresh the table
-            } else {
-                alert('Error: ' + message);
+        // Open the profile modal and populate it
+        function viewProfile(faculty) {
+            document.getElementById('modal-profile').textContent = faculty.profileDisplayFormat || faculty.name;
+            document.getElementById('modal-empid').textContent = faculty.employeeId;
+            document.getElementById('modal-email').textContent = faculty.email;
+            document.getElementById('modal-load').textContent = faculty.maxTeachingLoad;
+            
+            let coursesText = 'Not assigned yet';
+            let currentLoad = 0;
+            if (faculty.assignedCourseCode) {
+                const assignments = faculty.assignedCourseCode.split(';');
+                currentLoad = assignments.length;
+                coursesText = assignments.map(a => {
+                    const p = a.split(':');
+                    return p[0] + ' (' + p[1] + ')';
+                }).join(', ');
             }
-        } catch (err) {
-            alert('Connection error: ' + err.message);
+            document.getElementById('modal-course').textContent = coursesText;
+
+            // Visualise the teaching load capacity bar
+            const pct = (currentLoad / faculty.maxTeachingLoad) * 100;
+            document.getElementById('modal-load-bar').style.width = Math.min(pct, 100) + '%';
+
+            document.getElementById('modal-overlay').classList.add('visible');
         }
-    }
-
-    // Edit modal
-    function openEditModal(faculty) {
-        // Populate hidden id
-        document.getElementById('edit-empid').value = faculty.employeeId;
-        document.getElementById('edit-empid-display').textContent = faculty.employeeId;
-
-        // Populate editable fields with current values
-        document.getElementById('edit-name').value       = faculty.name       || '';
-        document.getElementById('edit-department').value = faculty.department  || '';
-        document.getElementById('edit-email').value      = faculty.email       || '';
-
-        // Determine extra field based on faculty type
-        const isAdjunct = faculty.contractEndDate !== undefined;
-        const extraLabel = document.getElementById('edit-extra-label');
-        const extraInput = document.getElementById('edit-extra');
-        if (isAdjunct) {
-            extraLabel.textContent = 'Contract End Date (e.g. 2026-12-31)';
-            extraInput.value = faculty.contractEndDate || '';
-            extraInput.placeholder = 'YYYY-MM-DD';
-        } else {
-            extraLabel.textContent = 'Office Hours (e.g. Mon/Wed 10:00–12:00)';
-            extraInput.value = faculty.officeHours || '';
-            extraInput.placeholder = 'Mon/Wed 10:00–12:00';
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('visible');
         }
 
-        document.getElementById('edit-modal-overlay').classList.add('visible');
-    }
-    function closeEditModal() {
-        document.getElementById('edit-modal-overlay').classList.remove('visible');
-    }
-    async function confirmEdit() {
-        const employeeId = document.getElementById('edit-empid').value;
-        const name       = document.getElementById('edit-name').value.trim();
-        const department = document.getElementById('edit-department').value.trim();
-        const email      = document.getElementById('edit-email').value.trim();
-        const extraInfo  = document.getElementById('edit-extra').value.trim();
-
-        // Basic frontend validation
-        if (!name || !department || !email) {
-            alert('Name, Department, and Email are required.');
-            return;
+        // Delete modal
+        function openDeleteModal(empId) {
+            const faculty = allFaculty.find(f => f.employeeId === empId);
+            document.getElementById('delete-empid').value = empId;
+            document.getElementById('delete-name-display').textContent =
+                faculty ? faculty.name + ' (' + empId + ')' : empId;
+            document.getElementById('delete-modal-overlay').classList.add('visible');
         }
+        function closeDeleteModal() {
+            document.getElementById('delete-modal-overlay').classList.remove('visible');
+        }
+        async function confirmDelete() {
+            const employeeId = document.getElementById('delete-empid').value;
 
-        try {
-            const response = await fetch('/api/faculty/update', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ employeeId, name, department, email, extraInfo })
-            });
-            const message = await response.text();
-            if (response.ok) {
-                closeEditModal();
-                loadFaculty(); // refresh the table
-            } else {
-                alert('Error: ' + message);
+            try {
+                const response = await fetch('/api/faculty/delete', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ employeeId })
+                });
+                const message = await response.text();
+                if (response.ok) {
+                    closeDeleteModal();
+                    loadFaculty(); // refresh the table
+                } else {
+                    alert('Error: ' + message);
+                }
+            } catch (err) {
+                alert('Connection error: ' + err.message);
             }
-        } catch (err) {
-            alert('Connection error: ' + err.message);
         }
-    }
 
-    function logout() {
-        sessionStorage.clear();
-        window.location.href = 'login.html';
-    }
+        // Edit modal
+        function openEditModal(faculty) {
+            // Populate hidden id
+            document.getElementById('edit-empid').value = faculty.employeeId;
+            document.getElementById('edit-empid-display').textContent = faculty.employeeId;
 
-    // Load faculty on page open
-    loadFaculty();
-</script>
+            // Populate editable fields with current values
+            document.getElementById('edit-name').value = faculty.name || '';
+            document.getElementById('edit-department').value = faculty.department || '';
+            document.getElementById('edit-email').value = faculty.email || '';
+
+            // Determine extra field based on faculty type
+            const isAdjunct = faculty.contractEndDate !== undefined;
+            const extraLabel = document.getElementById('edit-extra-label');
+            const extraInput = document.getElementById('edit-extra');
+            if (isAdjunct) {
+                extraLabel.textContent = 'Contract End Date (e.g. 2026-12-31)';
+                extraInput.value = faculty.contractEndDate || '';
+                extraInput.placeholder = 'YYYY-MM-DD';
+            } else {
+                extraLabel.textContent = 'Office Hours (e.g. Mon/Wed 10:00–12:00)';
+                extraInput.value = faculty.officeHours || '';
+                extraInput.placeholder = 'Mon/Wed 10:00–12:00';
+            }
+
+            document.getElementById('edit-modal-overlay').classList.add('visible');
+        }
+        function closeEditModal() {
+            document.getElementById('edit-modal-overlay').classList.remove('visible');
+        }
+        async function confirmEdit() {
+            const employeeId = document.getElementById('edit-empid').value;
+            const name = document.getElementById('edit-name').value.trim();
+            const department = document.getElementById('edit-department').value.trim();
+            const email = document.getElementById('edit-email').value.trim();
+            const extraInfo = document.getElementById('edit-extra').value.trim();
+
+            // Basic frontend validation
+            if (!name || !department || !email) {
+                alert('Name, Department, and Email are required.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/faculty/update', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ employeeId, name, department, email, extraInfo })
+                });
+                const message = await response.text();
+                if (response.ok) {
+                    closeEditModal();
+                    loadFaculty(); // refresh the table
+                } else {
+                    alert('Error: ' + message);
+                }
+            } catch (err) {
+                alert('Connection error: ' + err.message);
+            }
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        // Load faculty on page open
+        loadFaculty();
+    </script>
 
 </body>
+
 </html>

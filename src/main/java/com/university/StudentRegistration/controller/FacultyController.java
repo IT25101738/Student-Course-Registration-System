@@ -107,6 +107,11 @@ public class FacultyController {
     public ResponseEntity<String> assignCourse(@RequestBody Map<String, String> requestData) {
         String employeeId  = requestData.get("employeeId");
         String courseCode  = requestData.get("courseCode");
+        String timeSlot    = requestData.get("timeSlot");
+
+        if (timeSlot == null || timeSlot.isBlank()) {
+            return ResponseEntity.status(400).body("Error: Time slot is required.");
+        }
 
         // Find the instructor
         Instructor instructor = instructorRepository.findByEmployeeId(employeeId);
@@ -119,27 +124,49 @@ public class FacultyController {
             return ResponseEntity.status(404).body("Error: Course not found.");
         }
 
-        // Count how many courses this instructor is already assigned to
-        long currentLoad = instructorRepository.findByAssignedCourseCode(courseCode).size();
+        String existingAssignments = instructor.getAssignedCourseCode();
+        int currentCount = 0;
+
+        if (existingAssignments != null && !existingAssignments.isBlank()) {
+            String[] assignments = existingAssignments.split(";");
+            currentCount = assignments.length;
+
+            // Check for duplicate course or time clash
+            for (String assignment : assignments) {
+                String[] parts = assignment.split(":");
+                if (parts.length == 2) {
+                    String existingCourse = parts[0];
+                    String existingTime = parts[1];
+
+                    if (existingCourse.equals(courseCode)) {
+                        return ResponseEntity.status(400).body("Error: Course " + courseCode + " is already assigned to this instructor.");
+                    }
+                    if (existingTime.equalsIgnoreCase(timeSlot.trim())) {
+                        return ResponseEntity.status(400).body("Error: Time clash detected! Instructor is already teaching " + existingCourse + " at " + existingTime + ".");
+                    }
+                }
+            }
+        }
 
         // POLYMORPHISM IN ACTION: calling getMaxTeachingLoad() on the parent reference
         // returns 4 for FullTimeProfessor and 2 for AdjunctProfessor at runtime.
         int maxLoad = instructor.getMaxTeachingLoad();
 
-        // Count courses already assigned to THIS specific instructor
-        long myLoad = instructorRepository.findAll().stream()
-                .filter(i -> i.getEmployeeId().equals(employeeId) && i.getAssignedCourseCode() != null)
-                .count();
-
-        if (myLoad >= maxLoad) {
+        if (currentCount >= maxLoad) {
             return ResponseEntity.status(400).body(
                     "Error: " + instructor.getName() + " has reached their maximum teaching load of "
                             + maxLoad + " course(s). Cannot assign another course.");
         }
 
-        instructor.setAssignedCourseCode(courseCode);
+        String newAssignment = courseCode + ":" + timeSlot.trim();
+        if (existingAssignments == null || existingAssignments.isBlank()) {
+            instructor.setAssignedCourseCode(newAssignment);
+        } else {
+            instructor.setAssignedCourseCode(existingAssignments + ";" + newAssignment);
+        }
+
         instructorRepository.save(instructor);
-        return ResponseEntity.ok("Course " + courseCode + " assigned to " + instructor.getName() + " successfully!");
+        return ResponseEntity.ok("Course " + courseCode + " at " + timeSlot.trim() + " assigned to " + instructor.getName() + " successfully!");
     }
 
     // -----------------------------------------------------------------------
