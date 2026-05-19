@@ -366,7 +366,7 @@
             <div class="teaching-load-bar">
                 <div class="teaching-load-fill" id="modal-load-bar"></div>
             </div>
-            <div class="modal-field" style="margin-top:12px;"><span>Assigned Course: </span><strong
+            <div class="modal-field" style="margin-top:12px;"><span>Assigned Courses: </span><strong
                     id="modal-course"></strong></div>
             <div class="modal-actions">
                 <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeModal()">Close</button>
@@ -460,10 +460,10 @@
                     ? '<span class="badge-adjunct">Adjunct</span>'
                     : '<span class="badge-fulltime">Full-Time</span>';
                 const maxLoad = f.maxTeachingLoad || '?';
-                
+
                 let coursesHtml = '<span style="color:#adb5bd">—</span>';
                 let timeHtml = '<span style="color:#adb5bd">—</span>';
-                
+
                 if (f.assignedCourseCode) {
                     const assignments = f.assignedCourseCode.split(';');
                     const courseList = [];
@@ -475,7 +475,7 @@
                             timeList.push(`<span style="display:block; margin-bottom:4px; font-size: 13px;">${parts[1]}</span>`);
                         }
                     });
-                    
+
                     if (courseList.length > 0) {
                         coursesHtml = courseList.join('');
                         timeHtml = timeList.join('');
@@ -518,7 +518,7 @@
             document.getElementById('modal-empid').textContent = faculty.employeeId;
             document.getElementById('modal-email').textContent = faculty.email;
             document.getElementById('modal-load').textContent = faculty.maxTeachingLoad;
-            
+
             let coursesText = 'Not assigned yet';
             let currentLoad = 0;
             if (faculty.assignedCourseCode) {

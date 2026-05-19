@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,30 +23,39 @@
             display: flex;
             flex-direction: column;
         }
+
         .sidebar-header {
             padding: 20px;
             font-size: 24px;
             font-weight: bold;
             border-bottom: 1px solid #343a40;
         }
+
         .sidebar-menu {
             list-style: none;
             padding: 0;
             margin: 0;
             flex-grow: 1;
         }
+
         .sidebar-menu li {
             padding: 15px 20px;
             cursor: pointer;
             transition: background 0.3s;
             color: #adb5bd;
         }
-        .sidebar-menu li:hover { background-color: #343a40; color: white; }
+
+        .sidebar-menu li:hover {
+            background-color: #343a40;
+            color: white;
+        }
+
         .sidebar-menu li.active {
             background-color: #343a40;
             color: white;
             border-left: 4px solid #007bff;
         }
+
         .logout-btn {
             padding: 15px 20px;
             color: #dc3545;
@@ -53,7 +63,10 @@
             border-top: 1px solid #343a40;
             transition: background 0.3s;
         }
-        .logout-btn:hover { background-color: #343a40; }
+
+        .logout-btn:hover {
+            background-color: #343a40;
+        }
 
         /* --- MAIN CONTENT --- */
         .main-content {
@@ -61,12 +74,14 @@
             padding: 40px;
             overflow-y: auto;
         }
+
         .page-title {
             font-size: 26px;
             font-weight: bold;
             color: #212529;
             margin-bottom: 8px;
         }
+
         .page-subtitle {
             color: #6c757d;
             margin-bottom: 24px;
@@ -80,6 +95,7 @@
             margin-bottom: 20px;
             align-items: center;
         }
+
         .toolbar input {
             flex: 1;
             padding: 10px 14px;
@@ -88,11 +104,13 @@
             font-size: 14px;
             max-width: 320px;
         }
+
         .toolbar input:focus {
             outline: none;
             border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
+
         .btn {
             padding: 10px 18px;
             border: none;
@@ -102,30 +120,58 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        .btn-primary { background-color: #007bff; color: white; }
-        .btn-primary:hover { background-color: #0056b3; }
-        .btn-success { background-color: #28a745; color: white; }
-        .btn-success:hover { background-color: #1e7e34; }
-        .btn-danger { background-color: #dc3545; color: white; }
-        .btn-danger:hover { background-color: #bd2130; }
-        .btn-sm { padding: 6px 12px; font-size: 13px; }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #1e7e34;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #bd2130;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
 
         /* --- TABLE --- */
         .table-card {
             background: white;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
             border: 1px solid #e9ecef;
             overflow: hidden;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
         thead {
             background-color: #212529;
             color: white;
         }
+
         thead th {
             padding: 14px 16px;
             text-align: left;
@@ -133,16 +179,22 @@
             font-weight: 500;
             letter-spacing: 0.5px;
         }
+
         tbody tr {
             border-bottom: 1px solid #f1f3f5;
             transition: background 0.15s;
         }
-        tbody tr:hover { background-color: #f8f9fa; }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
         tbody td {
             padding: 13px 16px;
             font-size: 14px;
             color: #212529;
         }
+
         .badge-fulltime {
             background-color: #d4edda;
             color: #155724;
@@ -151,6 +203,7 @@
             font-size: 12px;
             font-weight: 600;
         }
+
         .badge-adjunct {
             background-color: #fff3cd;
             color: #856404;
@@ -159,47 +212,77 @@
             font-size: 12px;
             font-weight: 600;
         }
-        .actions { display: flex; gap: 8px; }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
 
         /* --- MODAL (Profile view) --- */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
             z-index: 100;
             align-items: center;
             justify-content: center;
         }
-        .modal-overlay.visible { display: flex; }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
         .modal {
             background: white;
             border-radius: 12px;
             padding: 30px;
             max-width: 480px;
             width: 90%;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         }
-        .modal h3 { margin-top: 0; color: #212529; }
+
+        .modal h3 {
+            margin-top: 0;
+            color: #212529;
+        }
+
         .modal-field {
             margin-bottom: 12px;
             font-size: 14px;
         }
-        .modal-field span { color: #6c757d; font-weight: 500; }
-        .modal-field strong { color: #212529; }
+
+        .modal-field span {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .modal-field strong {
+            color: #212529;
+        }
+
         .teaching-load-bar {
             background: #e9ecef;
             border-radius: 8px;
             height: 10px;
             margin-top: 6px;
         }
+
         .teaching-load-fill {
             height: 100%;
             border-radius: 8px;
             background: linear-gradient(90deg, #007bff, #00c6ff);
         }
-        .modal-actions { margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px; }
+
+        .modal-actions {
+            margin-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
 
         /* Empty state */
         .empty-state {
@@ -207,139 +290,169 @@
             padding: 60px 20px;
             color: #adb5bd;
         }
-        .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
     </style>
 </head>
+
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <div class="sidebar-header">UniPortal</div>
-    <ul class="sidebar-menu">
-        <li onclick="window.location.href='dashboard.html'">Dashboard</li>
-        <li onclick="window.location.href='enroll-courses.html'">Enroll Courses</li>
-        <li onclick="window.location.href='my-schedule.html'">My Schedule</li>
-        <li onclick="window.location.href='drop-course.html'">Drop Courses</li>
-        <li onclick="window.location.href='course-catalog.html'">Course Catalog</li>
-        <li class="active">Faculty Directory</li>
-        <li onclick="window.location.href='student-transcript.html'">My Transcript</li>
-        <li onclick="window.location.href='profile.html'">Update Profile</li>
-    </ul>
-    <div class="logout-btn" onclick="logout()">Logout</div>
-</div>
-
-<!-- MAIN CONTENT -->
-<div class="main-content">
-    <div class="page-title">Faculty Directory</div>
-    <div class="page-subtitle">Search and view all registered faculty members.</div>
-
-    <div class="toolbar">
-        <input type="text" id="search-input" placeholder="Search by name or department..." oninput="filterTable()">
-<!--        <button class="btn btn-success" onclick="window.location.href='admin-faculty-register.html'">+ Add Faculty</button>-->
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">UniPortal</div>
+        <ul class="sidebar-menu">
+            <li onclick="window.location.href='dashboard.html'">Dashboard</li>
+            <li onclick="window.location.href='enroll-courses.html'">Enroll Courses</li>
+            <li onclick="window.location.href='my-schedule.html'">My Schedule</li>
+            <li onclick="window.location.href='drop-course.html'">Drop Courses</li>
+            <li onclick="window.location.href='course-catalog.html'">Course Catalog</li>
+            <li class="active">Faculty Directory</li>
+            <li onclick="window.location.href='student-transcript.html'">My Transcript</li>
+            <li onclick="window.location.href='profile.html'">Update Profile</li>
+        </ul>
+        <div class="logout-btn" onclick="logout()">Logout</div>
     </div>
 
-    <div class="table-card">
-        <table>
-            <thead>
-            <tr>
-                <th>Employee ID</th>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Type</th>
-                <th>Max Load</th>
-                <th>Assigned Course</th>
-<!--                <th>Actions</th>-->
-            </tr>
-            </thead>
-            <tbody id="faculty-table-body">
-            <!-- Populated by JavaScript -->
-            </tbody>
-        </table>
-        <div class="empty-state" id="empty-state" style="display:none;">
-            <div class="icon">👨‍🏫</div>
-            <div>No faculty members found.</div>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="page-title">Faculty Directory</div>
+        <div class="page-subtitle">Search and view all registered faculty members.</div>
+
+        <div class="toolbar">
+            <input type="text" id="search-input" placeholder="Search by name or department..." oninput="filterTable()">
+            <!--        <button class="btn btn-success" onclick="window.location.href='admin-faculty-register.html'">+ Add Faculty</button>-->
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Type</th>
+                        <th>Max Load</th>
+                        <th>Assigned Courses</th>
+                        <th>Schedule / Time</th>
+                        <!--                <th>Actions</th>-->
+                    </tr>
+                </thead>
+                <tbody id="faculty-table-body">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+            <div class="empty-state" id="empty-state" style="display:none;">
+                <div class="icon">👨‍🏫</div>
+                <div>No faculty members found.</div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Profile Modal -->
-<div class="modal-overlay" id="modal-overlay">
-    <div class="modal">
-        <h3>Faculty Profile</h3>
-        <div class="modal-field"><span>Profile: </span><strong id="modal-profile"></strong></div>
-        <div class="modal-field"><span>Employee ID: </span><strong id="modal-empid"></strong></div>
-        <div class="modal-field"><span>Email: </span><strong id="modal-email"></strong></div>
-        <div class="modal-field"><span>Max Teaching Load: </span><strong id="modal-load"></strong> courses</div>
-        <div class="teaching-load-bar">
-            <div class="teaching-load-fill" id="modal-load-bar"></div>
-        </div>
-        <div class="modal-field" style="margin-top:12px;"><span>Assigned Course: </span><strong id="modal-course"></strong></div>
-        <div class="modal-actions">
-            <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeModal()">Close</button>
-        </div>
-    </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal-overlay" id="delete-modal-overlay">
-    <div class="modal">
-        <h3 style="color:#dc3545;">⚠️ Remove Faculty Member</h3>
-        <p style="color:#495057;font-size:14px;">This action cannot be undone. Enter the faculty member's password to confirm deletion.</p>
-        <input type="hidden" id="delete-empid">
-        <div class="modal-field">
-            <label style="font-size:14px;font-weight:500;color:#495057;">Password</label>
-            <input type="password" id="delete-password" placeholder="Enter faculty password"
-                   style="width:100%;padding:10px;border:1px solid #ced4da;border-radius:6px;margin-top:6px;box-sizing:border-box;">
-        </div>
-        <div class="modal-actions">
-            <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeDeleteModal()">Cancel</button>
-            <button class="btn btn-danger" onclick="confirmDelete()">Remove Faculty</button>
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <h3>Faculty Profile</h3>
+            <div class="modal-field"><span>Profile: </span><strong id="modal-profile"></strong></div>
+            <div class="modal-field"><span>Employee ID: </span><strong id="modal-empid"></strong></div>
+            <div class="modal-field"><span>Email: </span><strong id="modal-email"></strong></div>
+            <div class="modal-field"><span>Max Teaching Load: </span><strong id="modal-load"></strong> courses</div>
+            <div class="teaching-load-bar">
+                <div class="teaching-load-fill" id="modal-load-bar"></div>
+            </div>
+            <div class="modal-field" style="margin-top:12px;"><span>Assigned Courses: </span><strong
+                    id="modal-course"></strong></div>
+            <div class="modal-actions">
+                <button class="btn" style="background:#e9ecef;color:#212529;" onclick="closeModal()">Close</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    let allFaculty = [];
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="delete-modal-overlay">
+        <div class="modal">
+            <h3 style="color:#dc3545;">⚠️ Remove Faculty Member</h3>
+            <p style="color:#495057;font-size:14px;">This action cannot be undone. Enter the faculty member's password
+                to confirm deletion.</p>
+            <input type="hidden" id="delete-empid">
+            <div class="modal-field">
+                <label style="font-size:14px;font-weight:500;color:#495057;">Password</label>
+                <input type="password" id="delete-password" placeholder="Enter faculty password"
+                    style="width:100%;padding:10px;border:1px solid #ced4da;border-radius:6px;margin-top:6px;box-sizing:border-box;">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" style="background:#e9ecef;color:#212529;"
+                    onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">Remove Faculty</button>
+            </div>
+        </div>
+    </div>
 
-    // On page load: fetch all faculty from the API
-    async function loadFaculty() {
-        try {
-            const response = await fetch('/api/faculty/all');
-            allFaculty = await response.json();
-            renderTable(allFaculty);
-        } catch (err) {
-            console.error('Failed to load faculty:', err);
+    <script>
+        let allFaculty = [];
+
+        // On page load: fetch all faculty from the API
+        async function loadFaculty() {
+            try {
+                const response = await fetch('/api/faculty/all');
+                allFaculty = await response.json();
+                renderTable(allFaculty);
+            } catch (err) {
+                console.error('Failed to load faculty:', err);
+            }
         }
-    }
 
-    // Render the faculty data into the HTML table
-    function renderTable(data) {
-        const tbody = document.getElementById('faculty-table-body');
-        const emptyState = document.getElementById('empty-state');
+        // Render the faculty data into the HTML table
+        function renderTable(data) {
+            const tbody = document.getElementById('faculty-table-body');
+            const emptyState = document.getElementById('empty-state');
 
-        if (data.length === 0) {
-            tbody.innerHTML = '';
-            emptyState.style.display = 'block';
-            return;
-        }
-        emptyState.style.display = 'none';
+            if (data.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            emptyState.style.display = 'none';
 
-        tbody.innerHTML = data.map(f => {
-            // Determine the badge based on the faculty_type discriminator
-            const isFullTime = f.officeHours !== undefined || (f.maxTeachingLoad === 4);
-            const typeLabel = f.contractEndDate !== undefined
-                ? '<span class="badge-adjunct">Adjunct</span>'
-                : '<span class="badge-fulltime">Full-Time</span>';
-            const maxLoad = f.maxTeachingLoad || '?';
-            const course = f.assignedCourseCode || '<span style="color:#adb5bd">—</span>';
+            tbody.innerHTML = data.map(f => {
+                // Determine the badge based on the faculty_type discriminator
+                const isFullTime = f.officeHours !== undefined || (f.maxTeachingLoad === 4);
+                const typeLabel = f.contractEndDate !== undefined
+                    ? '<span class="badge-adjunct">Adjunct</span>'
+                    : '<span class="badge-fulltime">Full-Time</span>';
+                const maxLoad = f.maxTeachingLoad || '?';
 
-            return `<tr data-empid="${f.employeeId}" data-name="${f.name.toLowerCase()}" data-dept="${f.department.toLowerCase()}">
+                let coursesHtml = '<span style="color:#adb5bd">—</span>';
+                let timeHtml = '<span style="color:#adb5bd">—</span>';
+
+                if (f.assignedCourseCode) {
+                    const assignments = f.assignedCourseCode.split(';');
+                    const courseList = [];
+                    const timeList = [];
+                    assignments.forEach(a => {
+                        const parts = a.split(':');
+                        if (parts.length === 2) {
+                            courseList.push(`<span style="display:block; margin-bottom:4px;"><strong>${parts[0]}</strong></span>`);
+                            timeList.push(`<span style="display:block; margin-bottom:4px; font-size: 13px;">${parts[1]}</span>`);
+                        }
+                    });
+
+                    if (courseList.length > 0) {
+                        coursesHtml = courseList.join('');
+                        timeHtml = timeList.join('');
+                    }
+                }
+
+                return `<tr data-empid="${f.employeeId}" data-name="${(f.name || '').toLowerCase()}" data-dept="${(f.department || '').toLowerCase()}">
                 <td>${f.employeeId}</td>
                 <td>${f.name}</td>
                 <td>${f.department}</td>
                 <td>${typeLabel}</td>
                 <td>${maxLoad}</td>
-                <td>${course}</td>
+                <td>${coursesHtml}</td>
+                <td>${timeHtml}</td>
 <!--                <td>-->
 <!--                    <div class="actions">-->
 <!--                        <button class="btn btn-primary btn-sm" onclick='viewProfile(${JSON.stringify(f)})'>View</button>-->
@@ -347,77 +460,89 @@
 <!--                    </div>-->
 <!--                </td>-->
             </tr>`;
-        }).join('');
-    }
-
-    // Client-side search filter
-    function filterTable() {
-        const query = document.getElementById('search-input').value.toLowerCase();
-        const filtered = allFaculty.filter(f =>
-            f.name.toLowerCase().includes(query) ||
-            f.department.toLowerCase().includes(query) ||
-            f.employeeId.toLowerCase().includes(query)
-        );
-        renderTable(filtered);
-    }
-
-    // Open the profile modal and populate it
-    function viewProfile(faculty) {
-        document.getElementById('modal-profile').textContent = faculty.profileDisplayFormat || faculty.name;
-        document.getElementById('modal-empid').textContent = faculty.employeeId;
-        document.getElementById('modal-email').textContent = faculty.email;
-        document.getElementById('modal-load').textContent = faculty.maxTeachingLoad;
-        document.getElementById('modal-course').textContent = faculty.assignedCourseCode || 'Not assigned yet';
-
-        // Visualise the teaching load capacity bar (max 4 slots)
-        const pct = (faculty.maxTeachingLoad / 4) * 100;
-        document.getElementById('modal-load-bar').style.width = pct + '%';
-
-        document.getElementById('modal-overlay').classList.add('visible');
-    }
-    function closeModal() {
-        document.getElementById('modal-overlay').classList.remove('visible');
-    }
-
-    // Delete modal
-    function openDeleteModal(empId) {
-        document.getElementById('delete-empid').value = empId;
-        document.getElementById('delete-password').value = '';
-        document.getElementById('delete-modal-overlay').classList.add('visible');
-    }
-    function closeDeleteModal() {
-        document.getElementById('delete-modal-overlay').classList.remove('visible');
-    }
-    async function confirmDelete() {
-        const employeeId = document.getElementById('delete-empid').value;
-        const password   = document.getElementById('delete-password').value;
-
-        try {
-            const response = await fetch('/api/faculty/delete', {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ employeeId, password })
-            });
-            const message = await response.text();
-            if (response.ok) {
-                closeDeleteModal();
-                loadFaculty(); // refresh the table
-            } else {
-                alert(message);
-            }
-        } catch (err) {
-            alert('Connection error: ' + err.message);
+            }).join('');
         }
-    }
 
-    function logout() {
-        sessionStorage.clear();
-        window.location.href = 'login.html';
-    }
+        // Client-side search filter
+        function filterTable() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = allFaculty.filter(f =>
+                f.name.toLowerCase().includes(query) ||
+                f.department.toLowerCase().includes(query) ||
+                f.employeeId.toLowerCase().includes(query)
+            );
+            renderTable(filtered);
+        }
 
-    // Load faculty on page open
-    loadFaculty();
-</script>
+        // Open the profile modal and populate it
+        function viewProfile(faculty) {
+            document.getElementById('modal-profile').textContent = faculty.profileDisplayFormat || faculty.name;
+            document.getElementById('modal-empid').textContent = faculty.employeeId;
+            document.getElementById('modal-email').textContent = faculty.email;
+            document.getElementById('modal-load').textContent = faculty.maxTeachingLoad;
+
+            let coursesText = 'Not assigned yet';
+            let currentLoad = 0;
+            if (faculty.assignedCourseCode) {
+                const assignments = faculty.assignedCourseCode.split(';');
+                currentLoad = assignments.length;
+                coursesText = assignments.map(a => {
+                    const p = a.split(':');
+                    return p.length > 1 ? p[0] + ' (' + p[1] + ')' : p[0];
+                }).join(', ');
+            }
+            document.getElementById('modal-course').textContent = coursesText;
+
+            // Visualise the teaching load capacity bar
+            const pct = (currentLoad / faculty.maxTeachingLoad) * 100;
+            document.getElementById('modal-load-bar').style.width = Math.min(pct, 100) + '%';
+
+            document.getElementById('modal-overlay').classList.add('visible');
+        }
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('visible');
+        }
+
+        // Delete modal
+        function openDeleteModal(empId) {
+            document.getElementById('delete-empid').value = empId;
+            document.getElementById('delete-password').value = '';
+            document.getElementById('delete-modal-overlay').classList.add('visible');
+        }
+        function closeDeleteModal() {
+            document.getElementById('delete-modal-overlay').classList.remove('visible');
+        }
+        async function confirmDelete() {
+            const employeeId = document.getElementById('delete-empid').value;
+            const password = document.getElementById('delete-password').value;
+
+            try {
+                const response = await fetch('/api/faculty/delete', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ employeeId, password })
+                });
+                const message = await response.text();
+                if (response.ok) {
+                    closeDeleteModal();
+                    loadFaculty(); // refresh the table
+                } else {
+                    alert(message);
+                }
+            } catch (err) {
+                alert('Connection error: ' + err.message);
+            }
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        // Load faculty on page open
+        loadFaculty();
+    </script>
 
 </body>
+
 </html>
